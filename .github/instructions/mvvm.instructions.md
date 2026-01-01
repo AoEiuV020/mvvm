@@ -9,6 +9,7 @@ applyTo: '**'
 - **单向依赖**：View → ViewModel → Model，禁止反向依赖
 - **职责分离**：各层只处理本层职责，不越界
 - **可测试性**：ViewModel 和 Model 必须可独立测试，不依赖 UI 框架
+- **接口优先**：ViewModel 和 Model 必须定义接口，实现类依赖接口而非具体类
 
 ---
 
@@ -19,6 +20,10 @@ applyTo: '**'
 - 实现业务逻辑和规则
 - 数据持久化和网络请求
 - 数据验证和转换
+
+**强制要求：**
+- ✅ Repository/Service 必须定义接口（如 `IMessageRepository`）
+- ✅ 实现类实现该接口（如 `MessageRepository`）
 
 **禁止：**
 - ❌ 引用 View 或 ViewModel
@@ -36,6 +41,11 @@ applyTo: '**'
 - 将 Model 数据转换为 View 可用的格式
 - 处理用户交互逻辑
 - 暴露可观察的状态给 View
+
+**强制要求：**
+- ✅ 必须定义 ViewModel 接口（如 `IChatViewModel`）
+- ✅ 实现类实现该接口（如 `ChatViewModel`）
+- ✅ 依赖 Model 层的接口，而非具体实现
 
 **禁止：**
 - ❌ 引用具体的 View 实现
@@ -72,8 +82,11 @@ applyTo: '**'
 
 ### 命名约定
 
-- Model：`XxxModel`, `XxxEntity`, `XxxRepository`
-- ViewModel：`XxxViewModel`, `XxxVM`
+- Model 接口：`IXxxRepository`, `IXxxService`
+- Model 实现：`XxxRepository`, `XxxService`
+- Model 实体：`XxxModel`, `XxxEntity`
+- ViewModel 接口：`IXxxViewModel`
+- ViewModel 实现：`XxxViewModel`
 - View：`XxxView`, `XxxPage`, `XxxScreen`, `XxxWidget`
 
 ### 检查清单
@@ -84,3 +97,5 @@ applyTo: '**'
 3. [ ] 业务逻辑是否在 Model 层？
 4. [ ] UI 状态是否由 ViewModel 管理？
 5. [ ] View 是否只做展示和事件转发？
+6. [ ] ViewModel/Repository/Service 是否定义了接口？
+7. [ ] 依赖注入是否使用接口而非具体类？
