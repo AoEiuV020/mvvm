@@ -51,3 +51,5 @@
 1. 这本质是不是共用vm？是否能作为通用做法建议其他框架也使用？
 
 1. md/规划/通用/跨页面状态共享.md:15通用文档务必通用， 别写具体方案， 把这点写进.github/instructions/project.instructions.md强调，
+
+1. md/规划/flutter/跨页面状态共享.md 什么情况会销毁是不是应该重点强调一下？
