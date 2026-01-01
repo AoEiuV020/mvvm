@@ -40,7 +40,7 @@ class LoginViewModel extends _$LoginViewModel {
   
   Future<bool> login() async {
     state = state.copyWith(isLoading: true);
-    final result = await _authService.login(state.username, state.password);
+    final result = await _authService.login(state.countryCode, state.phone, state.password);
     state = state.copyWith(isLoading: false);
     return result.success;
   }

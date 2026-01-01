@@ -24,7 +24,7 @@
 
 ## 使用指南
 
-1. **新建项目**：先看 [技术栈](技术栈.md) 和 [项目结构](项目结构.md)
+1. **新建项目**：先看本文档技术栈和 [项目结构](项目结构.md)
 2. **实现功能**：按 [SDK使用方式](SDK使用方式.md) 配置依赖，按 [状态管理](状态管理.md) 实现 ViewModel
 3. **添加页面**：按 [路由导航](路由导航.md) 配置路由
 4. **编写测试**：按 [测试规范](测试规范.md) 编写测试用例
@@ -34,5 +34,5 @@
 | MVVM 层 | Flutter 实现 |
 |---------|--------------|
 | Model | SDK 接口 + 数据类 |
-| ViewModel | ChangeNotifier + Riverpod Provider |
+| ViewModel | @riverpod Notifier |
 | View | ConsumerWidget / ConsumerStatefulWidget |
