@@ -32,9 +32,6 @@ md_mvvm/
 | `feedback.instructions.md` | 反馈与确认规范 |
 | `mvvm.instructions.md` | MVVM 架构约束 |
 | `project.instructions.md` | 本文件，项目结构说明 |
-| `flutter.instructions.md` | Flutter 特定约束 |
-| `arkts.instructions.md` | ArkTS 特定约束 |
-| `vue3.instructions.md` | Vue3 特定约束 |
 
 ---
 
@@ -111,18 +108,9 @@ md/规划/
 │       ├── 个人资料.md
 │       ├── 设置页面.md
 │       └── 账号安全.md
-├── flutter/                    # Flutter 框架特殊说明
-│   ├── 状态管理.md             # 使用的状态管理方案
-│   ├── 路由导航.md
-│   └── 组件规范.md
-├── arkts/                      # ArkTS 框架特殊说明
-│   ├── 状态管理.md
-│   ├── 路由导航.md
-│   └── 组件规范.md
-└── vue3/                       # Vue3 框架特殊说明
-    ├── 状态管理.md             # Pinia 相关
-    ├── 路由导航.md
-    └── 组件规范.md
+├── flutter/                    # Flutter 框架约束，入口：README.md
+├── arkts/                      # ArkTS 框架约束（待补充）
+└── vue3/                       # Vue3 框架约束（待补充）
 ```
 
 #### 文档内容规范
@@ -131,10 +119,18 @@ md/规划/
 - 功能描述
 - UI 布局说明
 - Model 层：依赖的 SDK 接口
-- ViewModel 层：接口定义（使用 Flutter 代码）、状态说明、行为逻辑
+- ViewModel 层：接口定义、状态说明、行为逻辑
 - View 层：职责和用户交互
 
-**代码规范：** 接口定义使用 Flutter/Dart 代码，简洁优先。
+**代码规范：**
+- SDK 接口和 ViewModel 接口使用 Dart 代码定义
+- 代码应简洁，只包含接口签名，不含实现细节
+- 其他框架（ArkTS/Vue3）在实现时参照 Dart 接口转换
+
+**严格约束原则：**
+- `.github/instructions/` 和 `md/规划/` 中的规范是强制性的
+- 禁止使用"或"、"可选"、"建议"等模糊表述
+- AI 生成代码必须严格遵循，不得自由发挥或替换技术选型
 
 ---
 
