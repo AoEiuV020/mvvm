@@ -18,6 +18,7 @@
 | [项目结构](项目结构.md) | 创建新文件时确定放置位置和命名 |
 | [SDK使用方式](SDK使用方式.md) | 初始化 SDK、配置 Provider |
 | [状态管理](状态管理.md) | 实现 ViewModel（@riverpod + freezed） |
+| [复杂页面组织](复杂页面组织.md) | 多 ViewModel、View 组合、通信 |
 | [路由导航](路由导航.md) | 配置路由、页面跳转 |
 | [测试规范](测试规范.md) | 单元测试和 Widget 测试 |
 
