@@ -3,13 +3,14 @@
 ## SDK Provider 配置
 
 ```dart
-final imsdkProvider = Provider<IMSDK>((ref) {
+@riverpod
+IMSDK imsdk(Ref ref) {
   throw UnimplementedError('需要在 ProviderScope 中 override');
-});
+}
 
-final authServiceProvider = Provider<IAuthService>((ref) {
-  return ref.watch(imsdkProvider).authService;
-});
+@riverpod
+IAuthService authService(Ref ref) => ref.watch(imsdkProvider).authService;
+
 // 其他服务同理
 ```
 
@@ -30,17 +31,20 @@ void main() async {
 ## ViewModel Provider
 
 ```dart
-final loginViewModelProvider = ChangeNotifierProvider<LoginViewModel>((ref) {
-  return LoginViewModel(ref.watch(authServiceProvider));
-});
-
-// 带参数
-final chatViewModelProvider = ChangeNotifierProvider.family<ChatViewModel, String>(
-  (ref, conversationId) => ChatViewModel(
-    conversationId: conversationId,
-    messageService: ref.watch(messageServiceProvider),
-  ),
-);
+@riverpod
+class LoginViewModel extends _$LoginViewModel {
+  @override
+  LoginState build() => const LoginState();
+  
+  IAuthService get _authService => ref.read(authServiceProvider);
+  
+  Future<bool> login() async {
+    state = state.copyWith(isLoading: true);
+    final result = await _authService.login(state.username, state.password);
+    state = state.copyWith(isLoading: false);
+    return result.success;
+  }
+}
 ```
 
 ## View 使用
@@ -49,8 +53,9 @@ final chatViewModelProvider = ChangeNotifierProvider.family<ChatViewModel, Strin
 class LoginPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final vm = ref.watch(loginViewModelProvider);
-    // 使用 vm.xxx 访问状态和方法
+    final state = ref.watch(loginViewModelProvider);
+    final vm = ref.read(loginViewModelProvider.notifier);
+    // 使用 state.xxx 和 vm.xxx()
   }
 }
 ```
