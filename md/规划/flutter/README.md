@@ -1,10 +1,19 @@
 # Flutter 约束总览
 
+## 技术栈
+
+| 库 | 用途 |
+|---|------|
+| flutter_riverpod | 状态管理 |
+| go_router | 路由导航 |
+| riverpod_generator | Provider 代码生成 |
+| freezed | 不可变模型生成 |
+| dio | 网络请求（SDK 内部） |
+
 ## 文档索引
 
 | 文档 | 场景 |
 |------|------|
-| [技术栈](技术栈.md) | 查看依赖库和版本要求 |
 | [项目结构](项目结构.md) | 创建新文件时确定放置位置和命名 |
 | [SDK使用方式](SDK使用方式.md) | 初始化 SDK、配置 Provider、注入依赖 |
 | [状态管理](状态管理.md) | 实现 ViewModel、管理状态 |
