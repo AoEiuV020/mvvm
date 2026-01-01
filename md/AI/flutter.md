@@ -53,3 +53,6 @@
 1. md/规划/通用/跨页面状态共享.md:15通用文档务必通用， 别写具体方案， 把这点写进.github/instructions/project.instructions.md强调，
 
 1. md/规划/flutter/跨页面状态共享.md 什么情况会销毁是不是应该重点强调一下？
+
+1. 是否需要定义模块内的目录安排？比如应该按页面功能划分还是按mvvm划分？以flutter为例，lib目录内的结构定义一下， 
+
