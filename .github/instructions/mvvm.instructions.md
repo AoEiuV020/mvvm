@@ -20,10 +20,12 @@ applyTo: '**'
 - 实现业务逻辑和规则
 - 数据持久化和网络请求
 - 数据验证和转换
+- **表单校验逻辑**（Validator 类）
 
 **强制要求：**
 - ✅ Repository/Service 必须定义接口（如 `IMessageRepository`）
 - ✅ 实现类实现该接口（如 `MessageRepository`）
+- ✅ 表单校验逻辑定义在 Model 层（如 `PhoneValidator`）
 
 **禁止：**
 - ❌ 引用 View 或 ViewModel
