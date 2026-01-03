@@ -14,7 +14,8 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$LoginState {
 
- String get countryCode; String get phone; String? get phoneError; String get password; String? get passwordError; bool get isPasswordVisible; bool get isLoading; String? get errorMessage;
+ String get countryCode; String get phone; String? get phoneError; String get password; String? get passwordError; bool get isPasswordVisible; bool get isLoading; String? get errorMessage;/// 待选用户列表（非空时表示需要用户选择）
+ List<UserOption>? get pendingUsers;
 /// Create a copy of LoginState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +26,16 @@ $LoginStateCopyWith<LoginState> get copyWith => _$LoginStateCopyWithImpl<LoginSt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoginState&&(identical(other.countryCode, countryCode) || other.countryCode == countryCode)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.phoneError, phoneError) || other.phoneError == phoneError)&&(identical(other.password, password) || other.password == password)&&(identical(other.passwordError, passwordError) || other.passwordError == passwordError)&&(identical(other.isPasswordVisible, isPasswordVisible) || other.isPasswordVisible == isPasswordVisible)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoginState&&(identical(other.countryCode, countryCode) || other.countryCode == countryCode)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.phoneError, phoneError) || other.phoneError == phoneError)&&(identical(other.password, password) || other.password == password)&&(identical(other.passwordError, passwordError) || other.passwordError == passwordError)&&(identical(other.isPasswordVisible, isPasswordVisible) || other.isPasswordVisible == isPasswordVisible)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&const DeepCollectionEquality().equals(other.pendingUsers, pendingUsers));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,countryCode,phone,phoneError,password,passwordError,isPasswordVisible,isLoading,errorMessage);
+int get hashCode => Object.hash(runtimeType,countryCode,phone,phoneError,password,passwordError,isPasswordVisible,isLoading,errorMessage,const DeepCollectionEquality().hash(pendingUsers));
 
 @override
 String toString() {
-  return 'LoginState(countryCode: $countryCode, phone: $phone, phoneError: $phoneError, password: $password, passwordError: $passwordError, isPasswordVisible: $isPasswordVisible, isLoading: $isLoading, errorMessage: $errorMessage)';
+  return 'LoginState(countryCode: $countryCode, phone: $phone, phoneError: $phoneError, password: $password, passwordError: $passwordError, isPasswordVisible: $isPasswordVisible, isLoading: $isLoading, errorMessage: $errorMessage, pendingUsers: $pendingUsers)';
 }
 
 
@@ -45,7 +46,7 @@ abstract mixin class $LoginStateCopyWith<$Res>  {
   factory $LoginStateCopyWith(LoginState value, $Res Function(LoginState) _then) = _$LoginStateCopyWithImpl;
 @useResult
 $Res call({
- String countryCode, String phone, String? phoneError, String password, String? passwordError, bool isPasswordVisible, bool isLoading, String? errorMessage
+ String countryCode, String phone, String? phoneError, String password, String? passwordError, bool isPasswordVisible, bool isLoading, String? errorMessage, List<UserOption>? pendingUsers
 });
 
 
@@ -62,7 +63,7 @@ class _$LoginStateCopyWithImpl<$Res>
 
 /// Create a copy of LoginState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? countryCode = null,Object? phone = null,Object? phoneError = freezed,Object? password = null,Object? passwordError = freezed,Object? isPasswordVisible = null,Object? isLoading = null,Object? errorMessage = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? countryCode = null,Object? phone = null,Object? phoneError = freezed,Object? password = null,Object? passwordError = freezed,Object? isPasswordVisible = null,Object? isLoading = null,Object? errorMessage = freezed,Object? pendingUsers = freezed,}) {
   return _then(_self.copyWith(
 countryCode: null == countryCode ? _self.countryCode : countryCode // ignore: cast_nullable_to_non_nullable
 as String,phone: null == phone ? _self.phone : phone // ignore: cast_nullable_to_non_nullable
@@ -72,7 +73,8 @@ as String,passwordError: freezed == passwordError ? _self.passwordError : passwo
 as String?,isPasswordVisible: null == isPasswordVisible ? _self.isPasswordVisible : isPasswordVisible // ignore: cast_nullable_to_non_nullable
 as bool,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
 as bool,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
-as String?,
+as String?,pendingUsers: freezed == pendingUsers ? _self.pendingUsers : pendingUsers // ignore: cast_nullable_to_non_nullable
+as List<UserOption>?,
   ));
 }
 
@@ -157,10 +159,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String countryCode,  String phone,  String? phoneError,  String password,  String? passwordError,  bool isPasswordVisible,  bool isLoading,  String? errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String countryCode,  String phone,  String? phoneError,  String password,  String? passwordError,  bool isPasswordVisible,  bool isLoading,  String? errorMessage,  List<UserOption>? pendingUsers)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _LoginState() when $default != null:
-return $default(_that.countryCode,_that.phone,_that.phoneError,_that.password,_that.passwordError,_that.isPasswordVisible,_that.isLoading,_that.errorMessage);case _:
+return $default(_that.countryCode,_that.phone,_that.phoneError,_that.password,_that.passwordError,_that.isPasswordVisible,_that.isLoading,_that.errorMessage,_that.pendingUsers);case _:
   return orElse();
 
 }
@@ -178,10 +180,10 @@ return $default(_that.countryCode,_that.phone,_that.phoneError,_that.password,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String countryCode,  String phone,  String? phoneError,  String password,  String? passwordError,  bool isPasswordVisible,  bool isLoading,  String? errorMessage)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String countryCode,  String phone,  String? phoneError,  String password,  String? passwordError,  bool isPasswordVisible,  bool isLoading,  String? errorMessage,  List<UserOption>? pendingUsers)  $default,) {final _that = this;
 switch (_that) {
 case _LoginState():
-return $default(_that.countryCode,_that.phone,_that.phoneError,_that.password,_that.passwordError,_that.isPasswordVisible,_that.isLoading,_that.errorMessage);case _:
+return $default(_that.countryCode,_that.phone,_that.phoneError,_that.password,_that.passwordError,_that.isPasswordVisible,_that.isLoading,_that.errorMessage,_that.pendingUsers);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -198,10 +200,10 @@ return $default(_that.countryCode,_that.phone,_that.phoneError,_that.password,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String countryCode,  String phone,  String? phoneError,  String password,  String? passwordError,  bool isPasswordVisible,  bool isLoading,  String? errorMessage)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String countryCode,  String phone,  String? phoneError,  String password,  String? passwordError,  bool isPasswordVisible,  bool isLoading,  String? errorMessage,  List<UserOption>? pendingUsers)?  $default,) {final _that = this;
 switch (_that) {
 case _LoginState() when $default != null:
-return $default(_that.countryCode,_that.phone,_that.phoneError,_that.password,_that.passwordError,_that.isPasswordVisible,_that.isLoading,_that.errorMessage);case _:
+return $default(_that.countryCode,_that.phone,_that.phoneError,_that.password,_that.passwordError,_that.isPasswordVisible,_that.isLoading,_that.errorMessage,_that.pendingUsers);case _:
   return null;
 
 }
@@ -213,7 +215,7 @@ return $default(_that.countryCode,_that.phone,_that.phoneError,_that.password,_t
 
 
 class _LoginState implements LoginState {
-  const _LoginState({this.countryCode = '+86', this.phone = '', this.phoneError, this.password = '', this.passwordError, this.isPasswordVisible = false, this.isLoading = false, this.errorMessage});
+  const _LoginState({this.countryCode = '+86', this.phone = '', this.phoneError, this.password = '', this.passwordError, this.isPasswordVisible = false, this.isLoading = false, this.errorMessage, final  List<UserOption>? pendingUsers}): _pendingUsers = pendingUsers;
   
 
 @override@JsonKey() final  String countryCode;
@@ -224,6 +226,17 @@ class _LoginState implements LoginState {
 @override@JsonKey() final  bool isPasswordVisible;
 @override@JsonKey() final  bool isLoading;
 @override final  String? errorMessage;
+/// 待选用户列表（非空时表示需要用户选择）
+ final  List<UserOption>? _pendingUsers;
+/// 待选用户列表（非空时表示需要用户选择）
+@override List<UserOption>? get pendingUsers {
+  final value = _pendingUsers;
+  if (value == null) return null;
+  if (_pendingUsers is EqualUnmodifiableListView) return _pendingUsers;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(value);
+}
+
 
 /// Create a copy of LoginState
 /// with the given fields replaced by the non-null parameter values.
@@ -235,16 +248,16 @@ _$LoginStateCopyWith<_LoginState> get copyWith => __$LoginStateCopyWithImpl<_Log
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LoginState&&(identical(other.countryCode, countryCode) || other.countryCode == countryCode)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.phoneError, phoneError) || other.phoneError == phoneError)&&(identical(other.password, password) || other.password == password)&&(identical(other.passwordError, passwordError) || other.passwordError == passwordError)&&(identical(other.isPasswordVisible, isPasswordVisible) || other.isPasswordVisible == isPasswordVisible)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LoginState&&(identical(other.countryCode, countryCode) || other.countryCode == countryCode)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.phoneError, phoneError) || other.phoneError == phoneError)&&(identical(other.password, password) || other.password == password)&&(identical(other.passwordError, passwordError) || other.passwordError == passwordError)&&(identical(other.isPasswordVisible, isPasswordVisible) || other.isPasswordVisible == isPasswordVisible)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&const DeepCollectionEquality().equals(other._pendingUsers, _pendingUsers));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,countryCode,phone,phoneError,password,passwordError,isPasswordVisible,isLoading,errorMessage);
+int get hashCode => Object.hash(runtimeType,countryCode,phone,phoneError,password,passwordError,isPasswordVisible,isLoading,errorMessage,const DeepCollectionEquality().hash(_pendingUsers));
 
 @override
 String toString() {
-  return 'LoginState(countryCode: $countryCode, phone: $phone, phoneError: $phoneError, password: $password, passwordError: $passwordError, isPasswordVisible: $isPasswordVisible, isLoading: $isLoading, errorMessage: $errorMessage)';
+  return 'LoginState(countryCode: $countryCode, phone: $phone, phoneError: $phoneError, password: $password, passwordError: $passwordError, isPasswordVisible: $isPasswordVisible, isLoading: $isLoading, errorMessage: $errorMessage, pendingUsers: $pendingUsers)';
 }
 
 
@@ -255,7 +268,7 @@ abstract mixin class _$LoginStateCopyWith<$Res> implements $LoginStateCopyWith<$
   factory _$LoginStateCopyWith(_LoginState value, $Res Function(_LoginState) _then) = __$LoginStateCopyWithImpl;
 @override @useResult
 $Res call({
- String countryCode, String phone, String? phoneError, String password, String? passwordError, bool isPasswordVisible, bool isLoading, String? errorMessage
+ String countryCode, String phone, String? phoneError, String password, String? passwordError, bool isPasswordVisible, bool isLoading, String? errorMessage, List<UserOption>? pendingUsers
 });
 
 
@@ -272,7 +285,7 @@ class __$LoginStateCopyWithImpl<$Res>
 
 /// Create a copy of LoginState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? countryCode = null,Object? phone = null,Object? phoneError = freezed,Object? password = null,Object? passwordError = freezed,Object? isPasswordVisible = null,Object? isLoading = null,Object? errorMessage = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? countryCode = null,Object? phone = null,Object? phoneError = freezed,Object? password = null,Object? passwordError = freezed,Object? isPasswordVisible = null,Object? isLoading = null,Object? errorMessage = freezed,Object? pendingUsers = freezed,}) {
   return _then(_LoginState(
 countryCode: null == countryCode ? _self.countryCode : countryCode // ignore: cast_nullable_to_non_nullable
 as String,phone: null == phone ? _self.phone : phone // ignore: cast_nullable_to_non_nullable
@@ -282,7 +295,8 @@ as String,passwordError: freezed == passwordError ? _self.passwordError : passwo
 as String?,isPasswordVisible: null == isPasswordVisible ? _self.isPasswordVisible : isPasswordVisible // ignore: cast_nullable_to_non_nullable
 as bool,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
 as bool,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
-as String?,
+as String?,pendingUsers: freezed == pendingUsers ? _self._pendingUsers : pendingUsers // ignore: cast_nullable_to_non_nullable
+as List<UserOption>?,
   ));
 }
 

@@ -7,6 +7,7 @@ import 'dart:async' as _i3;
 
 import 'package:im_sdk_api/src/auth/auth_service.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
+import 'package:mockito/src/dummies.dart' as _i4;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -54,17 +55,30 @@ class MockIAuthService extends _i1.Mock implements _i2.IAuthService {
           as bool);
 
   @override
-  _i3.Future<_i2.LoginCredential> login(
+  _i3.Future<_i2.LoginResult> login(
     String? countryCode,
     String? phone,
     String? password,
   ) =>
       (super.noSuchMethod(
             Invocation.method(#login, [countryCode, phone, password]),
+            returnValue: _i3.Future<_i2.LoginResult>.value(
+              _i4.dummyValue<_i2.LoginResult>(
+                this,
+                Invocation.method(#login, [countryCode, phone, password]),
+              ),
+            ),
+          )
+          as _i3.Future<_i2.LoginResult>);
+
+  @override
+  _i3.Future<_i2.LoginCredential> selectUserAndLogin(String? userId) =>
+      (super.noSuchMethod(
+            Invocation.method(#selectUserAndLogin, [userId]),
             returnValue: _i3.Future<_i2.LoginCredential>.value(
               _FakeLoginCredential_0(
                 this,
-                Invocation.method(#login, [countryCode, phone, password]),
+                Invocation.method(#selectUserAndLogin, [userId]),
               ),
             ),
           )

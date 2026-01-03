@@ -9,6 +9,13 @@ import 'im_sdkui_test.mocks.dart';
 
 @GenerateMocks([IAuthService])
 void main() {
+  // 为 sealed class 提供 dummy value
+  setUpAll(() {
+    provideDummy<LoginResult>(
+      const LoginSuccess(LoginCredential(userId: 'dummy')),
+    );
+  });
+
   group('LoginValidator', () {
     test('validatePhone returns null for valid phone', () {
       expect(LoginValidator.validatePhone('13812345678'), isNull);
@@ -100,7 +107,10 @@ void main() {
     test('login success returns true', () async {
       when(
         mockAuthService.login('+86', '13812345678', 'password123'),
-      ).thenAnswer((_) async => const LoginCredential(userId: 'user123'));
+      ).thenAnswer(
+        (_) async =>
+            const LoginSuccess(LoginCredential(userId: 'user123')),
+      );
 
       final vm = container.read(loginViewModelProvider.notifier);
       vm.setPhone('13812345678');
@@ -111,6 +121,70 @@ void main() {
       verify(
         mockAuthService.login('+86', '13812345678', 'password123'),
       ).called(1);
+    });
+
+    test('login returns multiple users sets pendingUsers', () async {
+      final users = [
+        const UserOption(userId: 'user1', nickname: '用户1'),
+        const UserOption(userId: 'user2', nickname: '用户2'),
+      ];
+      when(
+        mockAuthService.login('+86', '13812345678', 'password123'),
+      ).thenAnswer((_) async => LoginMultipleUsers(users));
+
+      final vm = container.read(loginViewModelProvider.notifier);
+      vm.setPhone('13812345678');
+      vm.setPassword('password123');
+
+      final result = await vm.login();
+      expect(result, false);
+
+      final state = container.read(loginViewModelProvider);
+      expect(state.pendingUsers, users);
+      expect(state.errorMessage, isNull);
+    });
+
+    test('selectUserAndContinue success returns true', () async {
+      when(
+        mockAuthService.selectUserAndLogin('user1'),
+      ).thenAnswer((_) async => const LoginCredential(userId: 'user1'));
+
+      final vm = container.read(loginViewModelProvider.notifier);
+      final result = await vm.selectUserAndContinue('user1');
+      expect(result, true);
+      verify(mockAuthService.selectUserAndLogin('user1')).called(1);
+    });
+
+    test('selectUserAndContinue failure sets error', () async {
+      when(
+        mockAuthService.selectUserAndLogin(any),
+      ).thenThrow(const AuthException(AuthError.serverError));
+
+      final vm = container.read(loginViewModelProvider.notifier);
+      final result = await vm.selectUserAndContinue('user1');
+      expect(result, false);
+
+      final state = container.read(loginViewModelProvider);
+      expect(state.errorMessage, '服务器错误');
+    });
+
+    test('cancelUserSelection clears pendingUsers', () async {
+      final users = [
+        const UserOption(userId: 'user1', nickname: '用户1'),
+      ];
+      when(
+        mockAuthService.login('+86', '13812345678', 'password123'),
+      ).thenAnswer((_) async => LoginMultipleUsers(users));
+
+      final vm = container.read(loginViewModelProvider.notifier);
+      vm.setPhone('13812345678');
+      vm.setPassword('password123');
+
+      await vm.login();
+      expect(container.read(loginViewModelProvider).pendingUsers, isNotNull);
+
+      vm.cancelUserSelection();
+      expect(container.read(loginViewModelProvider).pendingUsers, isNull);
     });
 
     test('login failure returns false and sets error', () async {

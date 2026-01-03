@@ -111,6 +111,41 @@ ViewModel 通过依赖注入直接使用 SDK 接口，不需要额外的 "XxxMod
 | 表单校验规则 | Model | Validator 类 |
 | 表单校验触发 | ViewModel | 输入变化时调用 Validator |
 | 校验错误显示 | View | 绑定 VM 的 xxxError 状态 |
+| 流程中断等待用户选择 | ViewModel | 设置待选列表状态，View 显示选择 UI |
+
+---
+
+### 流程中断交互模式
+
+当业务流程需要中断等待用户选择时（如登录返回多个账号需选择）：
+
+**ViewModel 职责：**
+1. 执行到需要选择的步骤时，设置待选列表状态（如 `pendingUsers`）
+2. 暴露继续方法（如 `continueWithUser(userId)`）
+3. 用户选择后继续执行剩余流程
+
+**View 职责：**
+1. 监听待选列表状态
+2. 状态非空时显示选择 UI（Dialog/底部弹窗/新页面）
+3. 用户选择后调用 VM 的继续方法
+
+**状态设计示例：**
+```
+State {
+  isLoading: bool
+  pendingUsers: List<User>?  // 非空时表示需要用户选择
+  errorMessage: String?
+}
+```
+
+**流程：**
+```
+login() → API返回多用户 → 设置 pendingUsers → View 显示选择
+                                                    ↓
+continueWithUser(id) ← 用户点击选择 ← View 监听 pendingUsers
+         ↓
+    继续登录流程 → 完成/失败
+```
 
 ---
 

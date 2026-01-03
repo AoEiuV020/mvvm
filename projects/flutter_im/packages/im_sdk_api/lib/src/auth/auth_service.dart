@@ -9,12 +9,18 @@ abstract class IAuthService {
   /// 当前用户 ID（已登录时返回）
   String? get userId;
 
-  /// 手动登录，成功返回凭证，失败抛 AuthException
-  Future<LoginCredential> login(
+  /// 手动登录
+  /// - 单用户：成功返回 LoginResult.success
+  /// - 多用户：返回 LoginResult.multipleUsers，需要用户选择
+  /// - 失败：抛 AuthException
+  Future<LoginResult> login(
     String countryCode,
     String phone,
     String password,
   );
+
+  /// 选择用户继续登录（当 login 返回 multipleUsers 时调用）
+  Future<LoginCredential> selectUserAndLogin(String userId);
 
   /// 注册，成功返回凭证，失败抛 AuthException
   Future<RegisterCredential> register(
@@ -29,6 +35,36 @@ abstract class IAuthService {
 
   /// 登出（清除所有 Token）
   Future<void> logout();
+}
+
+/// 登录结果（sealed class）
+sealed class LoginResult {
+  const LoginResult();
+}
+
+/// 登录成功
+class LoginSuccess extends LoginResult {
+  final LoginCredential credential;
+  const LoginSuccess(this.credential);
+}
+
+/// 需要选择用户
+class LoginMultipleUsers extends LoginResult {
+  final List<UserOption> users;
+  const LoginMultipleUsers(this.users);
+}
+
+/// 可选用户信息
+class UserOption {
+  final String userId;
+  final String nickname;
+  final String? avatar;
+
+  const UserOption({
+    required this.userId,
+    required this.nickname,
+    this.avatar,
+  });
 }
 
 /// 登录成功返回的凭证（SDK 内部已保存 Token）

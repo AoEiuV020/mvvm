@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:im_sdk_api/im_sdk_api.dart';
 
 import 'login_state.dart';
 import 'login_viewmodel.dart';
@@ -36,6 +37,16 @@ class LoginPage extends ConsumerWidget {
         ScaffoldMessenger.of(
           context,
         ).showSnackBar(SnackBar(content: Text(errorMessage)));
+      }
+    });
+
+    // 监听 pendingUsers 显示选择弹窗
+    ref.listen(loginViewModelProvider.select((s) => s.pendingUsers), (
+      _,
+      pendingUsers,
+    ) {
+      if (pendingUsers != null && pendingUsers.isNotEmpty) {
+        _showUserSelectionDialog(context, pendingUsers, vm, onLoginSuccess);
       }
     });
 
@@ -148,6 +159,58 @@ class LoginPage extends ConsumerWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  void _showUserSelectionDialog(
+    BuildContext context,
+    List<UserOption> users,
+    LoginViewModel vm,
+    VoidCallback onLoginSuccess,
+  ) {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('选择账号'),
+        content: SizedBox(
+          width: double.maxFinite,
+          child: ListView.builder(
+            shrinkWrap: true,
+            itemCount: users.length,
+            itemBuilder: (_, index) {
+              final user = users[index];
+              return ListTile(
+                leading: CircleAvatar(
+                  backgroundImage: user.avatar != null
+                      ? NetworkImage(user.avatar!)
+                      : null,
+                  child: user.avatar == null
+                      ? Text(user.nickname.isNotEmpty ? user.nickname[0] : '?')
+                      : null,
+                ),
+                title: Text(user.nickname),
+                onTap: () async {
+                  Navigator.of(dialogContext).pop();
+                  final success = await vm.selectUserAndContinue(user.userId);
+                  if (success && context.mounted) {
+                    onLoginSuccess();
+                  }
+                },
+              );
+            },
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(dialogContext).pop();
+              vm.cancelUserSelection();
+            },
+            child: const Text('取消'),
+          ),
+        ],
       ),
     );
   }

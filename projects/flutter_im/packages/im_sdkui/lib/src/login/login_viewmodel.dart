@@ -46,17 +46,38 @@ class LoginViewModel extends _$LoginViewModel implements ILoginViewModel {
 
   @override
   void clearError() {
-    state = state.copyWith(errorMessage: null);
+    state = state.copyWith(errorMessage: null, pendingUsers: null);
   }
 
   @override
   Future<bool> login() async {
     if (!state.isLoginEnabled) return false;
 
-    state = state.copyWith(isLoading: true, errorMessage: null);
+    state = state.copyWith(isLoading: true, errorMessage: null, pendingUsers: null);
 
     try {
-      await _authService.login(state.countryCode, state.phone, state.password);
+      final result = await _authService.login(state.countryCode, state.phone, state.password);
+      switch (result) {
+        case LoginSuccess():
+          state = state.copyWith(isLoading: false);
+          return true;
+        case LoginMultipleUsers(:final users):
+          state = state.copyWith(isLoading: false, pendingUsers: users);
+          return false;
+      }
+    } on AuthException catch (e) {
+      final message = _mapAuthError(e.error);
+      state = state.copyWith(isLoading: false, errorMessage: message);
+      return false;
+    }
+  }
+
+  @override
+  Future<bool> selectUserAndContinue(String userId) async {
+    state = state.copyWith(isLoading: true, pendingUsers: null);
+
+    try {
+      await _authService.selectUserAndLogin(userId);
       state = state.copyWith(isLoading: false);
       return true;
     } on AuthException catch (e) {
@@ -64,6 +85,11 @@ class LoginViewModel extends _$LoginViewModel implements ILoginViewModel {
       state = state.copyWith(isLoading: false, errorMessage: message);
       return false;
     }
+  }
+
+  @override
+  void cancelUserSelection() {
+    state = state.copyWith(pendingUsers: null);
   }
 
   String _mapAuthError(AuthError error) {
