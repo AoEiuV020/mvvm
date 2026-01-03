@@ -111,3 +111,13 @@ melos exec --scope=im_app -- flutter build macos --debug
 1. md/规划/通用/框架目录约束.md:21 这些并不通用啊， 检查一下通用的文档不能出现不通用的内容， 
 
 1. .github/instructions/code-quality.instructions.md:25 反复说不要写不通用的内容， 
+
+1. projects/flutter_im/packages/im_sdkui/lib/src/login/login_page.dart flutter的ui是否能单元测试？
+
+1. projects/flutter_im/packages/im_sdkui/lib/src/login/login_page.dart:69 这种有必要写死宽度吗？一般不是通过padding/margin之类的控制留白的吗？是否需要约束禁止这种不要的尺寸硬编码？
+
+1. 那么既然确认了不是setScreenSize的原因， 现在setScreenSize可以删除吗？
+
+1. 检查md/规划/flutter/测试规范.md是否需要完善，是否可以简化，
+
+1. md/规划/flutter/测试规范.md:75 这种命令也应该改用melos，检查其他文档，

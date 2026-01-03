@@ -66,13 +66,14 @@ class LoginPage extends ConsumerWidget {
                 children: [
                   // 区号选择
                   SizedBox(
-                    width: 80,
+                    width: 100,
                     child: DropdownButtonFormField<String>(
-                      initialValue: state.countryCode,
+                      value: state.countryCode,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
-                        contentPadding: EdgeInsets.symmetric(horizontal: 12),
+                        contentPadding: EdgeInsets.symmetric(horizontal: 8),
                       ),
+                      isExpanded: true,
                       items: const [
                         DropdownMenuItem(value: '+86', child: Text('+86')),
                         DropdownMenuItem(value: '+1', child: Text('+1')),
