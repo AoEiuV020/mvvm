@@ -58,3 +58,17 @@
 
 1. 遵守md/规划/通用/登录注册/登录页面.md实现flutter代码到projects/flutter_im/packages/im_sdkui，分层添加测试，
 1. 注意im sdk没有实现，也先不要实现， 只处理projects/flutter_im/packages/im_sdk_api，先编写必要的sdk基础api，加上登录页需要的内容，
+
+1. packages/im_sdkui/lib/src/providers/sdk_providers.dart:18 警告， 
+```
+'AuthServiceRef' is deprecated and shouldn't be used. Will be removed in 3.0. Use Ref instead.
+Try replacing the use of the deprecated member with the replacement.dartdeprecated_member_use_from_same_package
+```
+1. 我看你也对freezed的用法做了调整， 所有框架级的调整都应该改到md/规划/flutter中对于框架用法的说明，
+
+1. md/规划/flutter/路由导航.md:67 我看还有旧代码， 你应该检查清楚，
+
+1. riverpod已经出v3了， 你dart pub看看全部升级到最新， 然后编译检查报错和警告都修复一下， 
+1. 记住md文档中记录用法， 
+
+1. flutter analyze 全部问题处理，

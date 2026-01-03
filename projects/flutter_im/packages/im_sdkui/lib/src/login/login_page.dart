@@ -54,7 +54,7 @@ class LoginPage extends ConsumerWidget {
                   SizedBox(
                     width: 80,
                     child: DropdownButtonFormField<String>(
-                      value: state.countryCode,
+                      initialValue: state.countryCode,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         contentPadding: EdgeInsets.symmetric(horizontal: 12),

@@ -1,5 +1,11 @@
 {
     "cSpell.words": [
         "sdkui"
-    ]
+    ],
+    "chat.tools.terminal.autoApprove": {
+        "dart run build_runner build": true,
+        "flutter test": true,
+        "dart test": true,
+        "melos": true,
+    }
 }

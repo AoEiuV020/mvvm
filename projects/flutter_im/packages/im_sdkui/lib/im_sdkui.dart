@@ -1,5 +1,3 @@
-library im_sdkui;
-
 // Login
 export 'src/login/login_page.dart';
 export 'src/login/login_state.dart';

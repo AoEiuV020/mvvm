@@ -2,14 +2,15 @@
 
 ## 技术栈
 
-| 库 | 用途 |
-|---|------|
-| flutter_riverpod | 状态管理 |
-| riverpod_generator | @riverpod 代码生成 |
-| freezed | 不可变状态类生成 |
-| go_router | 路由导航 |
-| dio | 网络请求（SDK 内部） |
-| mockito | 单元测试 Mock |
+| 库 | 版本 | 用途 |
+|---|------|------|
+| flutter_riverpod | ^3.1.0 | 状态管理 |
+| riverpod_annotation | ^4.0.0 | @riverpod 注解 |
+| riverpod_generator | ^4.0.0 | 代码生成 |
+| freezed | ^3.0.6 | 不可变状态类生成 |
+| go_router | - | 路由导航 |
+| dio | - | 网络请求（SDK 内部） |
+| mockito | ^5.4.5 | 单元测试 Mock |
 
 ## 文档索引
 

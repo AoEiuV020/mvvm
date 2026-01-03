@@ -15,6 +15,6 @@ part 'sdk_providers.g.dart';
 /// )
 /// ```
 @Riverpod(keepAlive: true)
-IAuthService authService(AuthServiceRef ref) {
+IAuthService authService(Ref ref) {
   throw UnimplementedError('authServiceProvider must be overridden');
 }
