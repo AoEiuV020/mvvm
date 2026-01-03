@@ -115,49 +115,84 @@ ViewModel 通过依赖注入直接使用 SDK 接口，不需要额外的 "XxxMod
 
 ---
 
-### 流程中断交互模式
+### 用户交互中断模式
 
-当业务流程需要中断等待用户选择时（如登录返回多个账号需选择）：
+业务流程中需要用户确认或选择时，根据复杂度选择对应模式：
 
-**Model/SDK 层约束：**
-- 保持无状态，不记住中间流程
+---
+
+#### 模式一：View 直接处理
+
+**适用场景：** 纯 UI 确认，无业务判断逻辑
+
+**特征：**
+- 确认内容固定（如"确定删除？"）
+- 无需根据业务状态决定是否显示
+- 确认后直接调用 ViewModel 方法
+
+**实现：**
+```
+View: 用户点击操作 → 显示确认弹窗 → 用户确认 → vm.execute(params)
+```
+
+ViewModel 不感知确认过程。
+
+---
+
+#### 模式二：ViewModel 控制确认状态
+
+**适用场景：** 需要业务逻辑判断或动态内容
+
+**特征：**
+- 需要根据权限/条件决定是否显示确认
+- 确认内容需要从业务数据动态生成
+- 需要统一管理确认状态
+
+**实现：**
+```
+ViewModel:
+  pendingAction: PendingAction?  // 非空时 View 显示确认 UI
+  
+  requestAction(params) → 设置 pendingAction
+  confirmAction() → 执行操作，清空 pendingAction
+  cancelAction() → 清空 pendingAction
+
+View: 监听 pendingAction，非空时显示确认 UI
+```
+
+---
+
+#### 模式三：流程中断等待选择
+
+**适用场景：** 异步流程中需要用户从列表中选择
+
+**特征：**
+- Model 返回多个选项，需用户选择一个继续
+- 选择后需要继续执行剩余流程
+- Model 保持无状态
+
+**Model 约束：**
 - 通过可选参数区分首次调用和继续调用
-- 示例：`login(phone, pwd, selectedUserId?)` 
-  - 无 selectedUserId：首次调用，可能返回待选列表
-  - 有 selectedUserId：继续调用，直接完成流程
+- 无 selectedId：首次调用，可能返回待选列表
+- 有 selectedId：继续调用，直接完成流程
 
 **ViewModel 职责：**
-1. 执行到需要选择的步骤时，设置待选列表状态（如 `pendingUsers`）
-2. 同时保存必要的输入参数用于继续调用（如 phone、password）
-3. 暴露继续方法，内部使用保存的参数 + 选择结果重新调用 Model
-4. 用户选择后继续执行剩余流程
+1. 执行到需要选择时，设置待选列表状态（如 `pendingItems`）
+2. 保存必要的输入参数用于继续调用
+3. 暴露继续方法，使用保存的参数 + 选择结果重新调用 Model
 
 **View 职责：**
 1. 监听待选列表状态
-2. 状态非空时显示选择 UI（Dialog/底部弹窗/新页面）
-3. 用户选择后调用 VM 的继续方法
-
-**状态设计示例：**
-```
-State {
-  // 输入参数（ViewModel 持有，用于继续调用）
-  phone: String
-  password: String
-  
-  // 流程状态
-  isLoading: bool
-  pendingUsers: List<User>?  // 非空时表示需要用户选择
-  errorMessage: String?
-}
-```
+2. 状态非空时显示选择 UI
+3. 用户选择后调用 ViewModel 的继续方法
 
 **流程：**
 ```
-login() → Model 返回多用户 → 设置 pendingUsers → View 显示选择
-                                                      ↓
-selectUser(id) ← 用户点击选择 ← View 监听 pendingUsers
+execute() → Model 返回待选列表 → 设置 pendingItems → View 显示选择
+                                                         ↓
+selectItem(id) ← 用户点击选择 ← View 监听 pendingItems
          ↓
-Model.login(phone, pwd, selectedUserId: id) → 完成/失败
+Model.execute(params, selectedId: id) → 完成/失败
 ```
 
 ---
