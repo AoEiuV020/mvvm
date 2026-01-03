@@ -172,3 +172,27 @@ md/规划/通用
 1. 两个`go('/register')`，这种设计真的好吗，
 
 1. 这种确实看起来不错， 但是能实现之前要求的模块可插拔吗？projects/flutter_im/packages/im_login/lib/src/login_provider_impl.dart这个是多余的吗？
+
+1. 差不多是这个思路， 就是针对场景的页面级的可插拔直接靠路由管理实现，页面的跳转本身通过回调传入view层，
+1. 而core层的模块provider只针对更复杂的功能解耦，比如目前示例的emoji , 再加上企业模块， 企业模块有很多功能需要影响其他模块内容， 比如通讯录页面要显示同事列表，登录页面的登录选择用户其实也是仅企业版选择用户唉不同企业的身份，这方面好好设计一下，
+
+1. IEnterpriseProvider 应该返回可空吗？按我的想法， IEnterpriseProvider本身可能为空， 但提供的内容都是一定要有的，
+1. 不是多用户装饰， 而是非企业版直接不提供登录多用户选择功能， 登录要么成果要么失败， 
+
+1. md/规划/flutter/项目结构.md:71 别在规划里实际列出所有内容， 用尽可能抽象的语言尽可能简单的约束这些行为， 
+
+1. 已经设计了的包括emoji声明到packages/im_ui_core/lib/src/interfaces，
+
+1. projects/flutter_im/packages/im_ui_core/lib/src/providers/emoji_providers.dart:13 像这些最后可能有多个模块需要注册， 都在app注册可能太麻烦， 是否可能在sdkui组装好方便app最后的初始化，
+
+1. projects/flutter_im/packages/im_sdkui/lib/src/module_overrides.dart:11啥玩意儿结果还是要从app层一个一个插件传入？那有屁用？
+
+1. 所有，sdkui依赖所有模块，假装所有模块都已经实现，app只需要依赖一个模块，
+
+1. 功能模块先不创建，在sdkui假装已经创建了按这种设计去写api，写文档，
+
+1. 反复强调了， 通用文档里禁止出现具体框架的代码， 
+
+1. md/规划/flutter 这里得严格约束框架使用方式，
+
+1. 调整一下md/规划/通用直接下级的文档， 要和md/规划/flutter一一对应，并且用抽象的语言，不使用具体代码，描述相关设计， 
