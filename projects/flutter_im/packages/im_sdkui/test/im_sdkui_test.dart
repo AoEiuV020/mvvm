@@ -145,22 +145,65 @@ void main() {
     });
 
     test('selectUserAndContinue success returns true', () async {
+      // 先触发登录获取多用户，再选择用户继续
+      final users = [
+        const UserOption(userId: 'user1', nickname: '用户1'),
+      ];
       when(
-        mockAuthService.selectUserAndLogin('user1'),
-      ).thenAnswer((_) async => const LoginCredential(userId: 'user1'));
+        mockAuthService.login('+86', '13812345678', 'password123'),
+      ).thenAnswer((_) async => LoginMultipleUsers(users));
 
       final vm = container.read(loginViewModelProvider.notifier);
+      vm.setPhone('13812345678');
+      vm.setPassword('password123');
+      await vm.login();
+
+      // 设置选择用户后的返回值
+      when(
+        mockAuthService.login(
+          '+86',
+          '13812345678',
+          'password123',
+          selectedUserId: 'user1',
+        ),
+      ).thenAnswer(
+        (_) async => const LoginSuccess(LoginCredential(userId: 'user1')),
+      );
+
       final result = await vm.selectUserAndContinue('user1');
       expect(result, true);
-      verify(mockAuthService.selectUserAndLogin('user1')).called(1);
+      verify(
+        mockAuthService.login(
+          '+86',
+          '13812345678',
+          'password123',
+          selectedUserId: 'user1',
+        ),
+      ).called(1);
     });
 
     test('selectUserAndContinue failure sets error', () async {
+      final users = [
+        const UserOption(userId: 'user1', nickname: '用户1'),
+      ];
       when(
-        mockAuthService.selectUserAndLogin(any),
-      ).thenThrow(const AuthException(AuthError.serverError));
+        mockAuthService.login('+86', '13812345678', 'password123'),
+      ).thenAnswer((_) async => LoginMultipleUsers(users));
 
       final vm = container.read(loginViewModelProvider.notifier);
+      vm.setPhone('13812345678');
+      vm.setPassword('password123');
+      await vm.login();
+
+      when(
+        mockAuthService.login(
+          '+86',
+          '13812345678',
+          'password123',
+          selectedUserId: 'user1',
+        ),
+      ).thenThrow(const AuthException(AuthError.serverError));
+
       final result = await vm.selectUserAndContinue('user1');
       expect(result, false);
 

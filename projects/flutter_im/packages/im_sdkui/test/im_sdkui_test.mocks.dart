@@ -24,15 +24,9 @@ import 'package:mockito/src/dummies.dart' as _i4;
 // ignore_for_file: subtype_of_sealed_class
 // ignore_for_file: invalid_use_of_internal_member
 
-class _FakeLoginCredential_0 extends _i1.SmartFake
-    implements _i2.LoginCredential {
-  _FakeLoginCredential_0(Object parent, Invocation parentInvocation)
-    : super(parent, parentInvocation);
-}
-
-class _FakeRegisterCredential_1 extends _i1.SmartFake
+class _FakeRegisterCredential_0 extends _i1.SmartFake
     implements _i2.RegisterCredential {
-  _FakeRegisterCredential_1(Object parent, Invocation parentInvocation)
+  _FakeRegisterCredential_0(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
@@ -58,31 +52,27 @@ class MockIAuthService extends _i1.Mock implements _i2.IAuthService {
   _i3.Future<_i2.LoginResult> login(
     String? countryCode,
     String? phone,
-    String? password,
-  ) =>
+    String? password, {
+    String? selectedUserId,
+  }) =>
       (super.noSuchMethod(
-            Invocation.method(#login, [countryCode, phone, password]),
+            Invocation.method(
+              #login,
+              [countryCode, phone, password],
+              {#selectedUserId: selectedUserId},
+            ),
             returnValue: _i3.Future<_i2.LoginResult>.value(
               _i4.dummyValue<_i2.LoginResult>(
                 this,
-                Invocation.method(#login, [countryCode, phone, password]),
+                Invocation.method(
+                  #login,
+                  [countryCode, phone, password],
+                  {#selectedUserId: selectedUserId},
+                ),
               ),
             ),
           )
           as _i3.Future<_i2.LoginResult>);
-
-  @override
-  _i3.Future<_i2.LoginCredential> selectUserAndLogin(String? userId) =>
-      (super.noSuchMethod(
-            Invocation.method(#selectUserAndLogin, [userId]),
-            returnValue: _i3.Future<_i2.LoginCredential>.value(
-              _FakeLoginCredential_0(
-                this,
-                Invocation.method(#selectUserAndLogin, [userId]),
-              ),
-            ),
-          )
-          as _i3.Future<_i2.LoginCredential>);
 
   @override
   _i3.Future<_i2.RegisterCredential> register(
@@ -99,7 +89,7 @@ class MockIAuthService extends _i1.Mock implements _i2.IAuthService {
               nickname,
             ]),
             returnValue: _i3.Future<_i2.RegisterCredential>.value(
-              _FakeRegisterCredential_1(
+              _FakeRegisterCredential_0(
                 this,
                 Invocation.method(#register, [
                   countryCode,

@@ -56,7 +56,11 @@ class LoginViewModel extends _$LoginViewModel implements ILoginViewModel {
     state = state.copyWith(isLoading: true, errorMessage: null, pendingUsers: null);
 
     try {
-      final result = await _authService.login(state.countryCode, state.phone, state.password);
+      final result = await _authService.login(
+        state.countryCode,
+        state.phone,
+        state.password,
+      );
       switch (result) {
         case LoginSuccess():
           state = state.copyWith(isLoading: false);
@@ -77,9 +81,21 @@ class LoginViewModel extends _$LoginViewModel implements ILoginViewModel {
     state = state.copyWith(isLoading: true, pendingUsers: null);
 
     try {
-      await _authService.selectUserAndLogin(userId);
-      state = state.copyWith(isLoading: false);
-      return true;
+      final result = await _authService.login(
+        state.countryCode,
+        state.phone,
+        state.password,
+        selectedUserId: userId,
+      );
+      switch (result) {
+        case LoginSuccess():
+          state = state.copyWith(isLoading: false);
+          return true;
+        case LoginMultipleUsers():
+          // 不应该发生，selectedUserId 非空时应直接成功
+          state = state.copyWith(isLoading: false, errorMessage: '登录失败');
+          return false;
+      }
     } on AuthException catch (e) {
       final message = _mapAuthError(e.error);
       state = state.copyWith(isLoading: false, errorMessage: message);

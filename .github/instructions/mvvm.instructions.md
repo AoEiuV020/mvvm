@@ -119,10 +119,18 @@ ViewModel 通过依赖注入直接使用 SDK 接口，不需要额外的 "XxxMod
 
 当业务流程需要中断等待用户选择时（如登录返回多个账号需选择）：
 
+**Model/SDK 层约束：**
+- 保持无状态，不记住中间流程
+- 通过可选参数区分首次调用和继续调用
+- 示例：`login(phone, pwd, selectedUserId?)` 
+  - 无 selectedUserId：首次调用，可能返回待选列表
+  - 有 selectedUserId：继续调用，直接完成流程
+
 **ViewModel 职责：**
 1. 执行到需要选择的步骤时，设置待选列表状态（如 `pendingUsers`）
-2. 暴露继续方法（如 `continueWithUser(userId)`）
-3. 用户选择后继续执行剩余流程
+2. 同时保存必要的输入参数用于继续调用（如 phone、password）
+3. 暴露继续方法，内部使用保存的参数 + 选择结果重新调用 Model
+4. 用户选择后继续执行剩余流程
 
 **View 职责：**
 1. 监听待选列表状态
@@ -132,6 +140,11 @@ ViewModel 通过依赖注入直接使用 SDK 接口，不需要额外的 "XxxMod
 **状态设计示例：**
 ```
 State {
+  // 输入参数（ViewModel 持有，用于继续调用）
+  phone: String
+  password: String
+  
+  // 流程状态
   isLoading: bool
   pendingUsers: List<User>?  // 非空时表示需要用户选择
   errorMessage: String?
@@ -140,11 +153,11 @@ State {
 
 **流程：**
 ```
-login() → API返回多用户 → 设置 pendingUsers → View 显示选择
-                                                    ↓
-continueWithUser(id) ← 用户点击选择 ← View 监听 pendingUsers
+login() → Model 返回多用户 → 设置 pendingUsers → View 显示选择
+                                                      ↓
+selectUser(id) ← 用户点击选择 ← View 监听 pendingUsers
          ↓
-    继续登录流程 → 完成/失败
+Model.login(phone, pwd, selectedUserId: id) → 完成/失败
 ```
 
 ---

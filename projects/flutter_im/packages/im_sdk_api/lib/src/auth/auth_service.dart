@@ -10,17 +10,15 @@ abstract class IAuthService {
   String? get userId;
 
   /// 手动登录
-  /// - 单用户：成功返回 LoginResult.success
-  /// - 多用户：返回 LoginResult.multipleUsers，需要用户选择
+  /// - selectedUserId 为 null：首次登录，可能返回多用户
+  /// - selectedUserId 非 null：选择用户后登录，直接返回成功
   /// - 失败：抛 AuthException
   Future<LoginResult> login(
     String countryCode,
     String phone,
-    String password,
-  );
-
-  /// 选择用户继续登录（当 login 返回 multipleUsers 时调用）
-  Future<LoginCredential> selectUserAndLogin(String userId);
+    String password, {
+    String? selectedUserId,
+  });
 
   /// 注册，成功返回凭证，失败抛 AuthException
   Future<RegisterCredential> register(
