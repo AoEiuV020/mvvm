@@ -1,5 +1,5 @@
 name: im_sdkui
-description: "A new Flutter package project."
+description: "IM SDK UI - 基础 UI SDK"
 version: 0.0.1
 homepage:
 
@@ -12,16 +12,22 @@ resolution: workspace
 dependencies:
   flutter:
     sdk: flutter
+  im_sdk_api:
+    path: ../im_sdk_api
+  flutter_riverpod: ^2.6.1
+  riverpod_annotation: ^2.6.1
+  freezed_annotation: ^3.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
+  riverpod_generator: ^2.6.5
+  build_runner: ^2.4.15
+  freezed: ^3.0.6
+  mockito: ^5.4.5
+  build_verify: ^3.1.0
 
-# For information on the generic Dart part of this file, see the
-# following page: https://dart.dev/tools/pub/pubspec
-
-# The following section is specific to Flutter packages.
 flutter:
 
   # To add assets to your package, add an assets section, like this:

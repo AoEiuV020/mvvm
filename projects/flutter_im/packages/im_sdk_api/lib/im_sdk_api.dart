@@ -1,8 +1,8 @@
-/// Support for doing something awesome.
-///
-/// More dartdocs go here.
+/// IM SDK API - 公共接口和模型
 library;
 
-export 'src/im_sdk_api_base.dart';
+// Auth
+export 'src/auth/auth_service.dart';
 
-// TODO: Export any libraries intended for clients of this package.
+// Models
+export 'src/models/user.dart';

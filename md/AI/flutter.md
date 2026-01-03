@@ -56,3 +56,5 @@
 
 1. 是否需要定义模块内的目录安排？比如应该按页面功能划分还是按mvvm划分？以flutter为例，lib目录内的结构定义一下， 
 
+1. 遵守md/规划/通用/登录注册/登录页面.md实现flutter代码到projects/flutter_im/packages/im_sdkui，分层添加测试，
+1. 注意im sdk没有实现，也先不要实现， 只处理projects/flutter_im/packages/im_sdk_api，先编写必要的sdk基础api，加上登录页需要的内容，
