@@ -121,3 +121,8 @@ melos exec --scope=im_app -- flutter build macos --debug
 1. 检查md/规划/flutter/测试规范.md是否需要完善，是否可以简化，
 
 1. md/规划/flutter/测试规范.md:75 这种命令也应该改用melos，检查其他文档，
+
+1. flutter这个测试名是否可以中文， 项目中能中文的地方都要中文， 基本上除了必要的代码，其他都得是中文， 看要不要在.github/instructions添加相关基础文档限制清楚， 
+
+1. 测试文件能否加上lib/src中相同的层级关系， 
+1. projects/flutter_im/packages/im_sdkui/test/im_sdkui_test.dart这个文件名是否不合适， 测试文件应该和源文件一一对应吧，至少view/vm/model分开测试， 目前im_sdkui_test似乎混合了vm/model，这块是否需要在哪个文档约束一下， 

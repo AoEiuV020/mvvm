@@ -41,8 +41,8 @@ void main() {
     );
   }
 
-  group('LoginPage Widget Tests', () {
-    testWidgets('renders login form elements', (tester) async {
+  group('登录页Widget测试', () {
+    testWidgets('渲染登录表单元素', (tester) async {
       await tester.pumpWidget(buildTestWidget());
 
       expect(find.text('手机号'), findsOneWidget);
@@ -52,7 +52,7 @@ void main() {
       expect(find.text('注册账号'), findsOneWidget);
     });
 
-    testWidgets('login button is disabled when form is empty', (tester) async {
+    testWidgets('表单为空时登录按钮禁用', (tester) async {
       await tester.pumpWidget(buildTestWidget());
 
       final loginButton = find.widgetWithText(ElevatedButton, '登录');
@@ -60,7 +60,7 @@ void main() {
       expect(button.onPressed, isNull);
     });
 
-    testWidgets('login button is enabled when form is valid', (tester) async {
+    testWidgets('表单有效时登录按钮启用', (tester) async {
       await tester.pumpWidget(buildTestWidget());
 
       // 输入有效手机号
@@ -82,7 +82,7 @@ void main() {
       expect(button.onPressed, isNotNull);
     });
 
-    testWidgets('shows phone error for invalid phone', (tester) async {
+    testWidgets('无效手机号显示错误', (tester) async {
       await tester.pumpWidget(buildTestWidget());
 
       await tester.enterText(
@@ -94,7 +94,7 @@ void main() {
       expect(find.text('手机号格式错误'), findsOneWidget);
     });
 
-    testWidgets('shows password error for short password', (tester) async {
+    testWidgets('短密码显示错误', (tester) async {
       await tester.pumpWidget(buildTestWidget());
 
       await tester.enterText(
@@ -106,7 +106,7 @@ void main() {
       expect(find.text('密码至少6位'), findsOneWidget);
     });
 
-    testWidgets('toggles password visibility', (tester) async {
+    testWidgets('切换密码可见性', (tester) async {
       await tester.pumpWidget(buildTestWidget());
 
       // 初始状态密码不可见
@@ -126,7 +126,7 @@ void main() {
       expect(passwordFieldAfter.obscureText, isFalse);
     });
 
-    testWidgets('calls onLoginSuccess when login succeeds', (tester) async {
+    testWidgets('登录成功时回调onLoginSuccess', (tester) async {
       var loginSuccessCalled = false;
 
       when(
@@ -155,7 +155,7 @@ void main() {
       expect(loginSuccessCalled, isTrue);
     });
 
-    testWidgets('shows snackbar on login error', (tester) async {
+    testWidgets('登录失败显示Snackbar', (tester) async {
       when(
         mockAuthService.login(any, any, any),
       ).thenThrow(const AuthException(AuthError.invalidCredentials));
@@ -178,8 +178,7 @@ void main() {
       expect(find.text('手机号或密码错误'), findsOneWidget);
     });
 
-    testWidgets('shows user selection dialog for multiple users',
-        (tester) async {
+    testWidgets('多用户时显示选择弹窗', (tester) async {
       final users = [
         const UserOption(userId: 'user1', nickname: '用户一'),
         const UserOption(userId: 'user2', nickname: '用户二'),
@@ -210,7 +209,7 @@ void main() {
       expect(find.text('用户二'), findsOneWidget);
     });
 
-    testWidgets('calls onRegisterTap when register is tapped', (tester) async {
+    testWidgets('点击注册回调onRegisterTap', (tester) async {
       var registerTapped = false;
 
       await tester.pumpWidget(buildTestWidget(
@@ -223,8 +222,7 @@ void main() {
       expect(registerTapped, isTrue);
     });
 
-    testWidgets('calls onForgotPasswordTap when forgot password is tapped',
-        (tester) async {
+    testWidgets('点击忘记密码回调onForgotPasswordTap', (tester) async {
       var forgotPasswordTapped = false;
 
       await tester.pumpWidget(buildTestWidget(

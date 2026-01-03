@@ -5,10 +5,13 @@ import 'package:im_sdkui/im_sdkui.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
-import 'im_sdkui_test.mocks.dart';
+import 'login_viewmodel_test.mocks.dart';
 
 @GenerateMocks([IAuthService])
 void main() {
+  late MockIAuthService mockAuthService;
+  late ProviderContainer container;
+
   // 为 sealed class 提供 dummy value
   setUpAll(() {
     provideDummy<LoginResult>(
@@ -16,49 +19,19 @@ void main() {
     );
   });
 
-  group('LoginValidator', () {
-    test('validatePhone returns null for valid phone', () {
-      expect(LoginValidator.validatePhone('13812345678'), isNull);
-    });
-
-    test('validatePhone returns error for empty phone', () {
-      expect(LoginValidator.validatePhone(''), '请输入手机号');
-    });
-
-    test('validatePhone returns error for invalid phone', () {
-      expect(LoginValidator.validatePhone('123'), '手机号格式错误');
-      expect(LoginValidator.validatePhone('abc'), '手机号格式错误');
-    });
-
-    test('validatePassword returns null for valid password', () {
-      expect(LoginValidator.validatePassword('password123'), isNull);
-    });
-
-    test('validatePassword returns error for empty password', () {
-      expect(LoginValidator.validatePassword(''), '请输入密码');
-    });
-
-    test('validatePassword returns error for short password', () {
-      expect(LoginValidator.validatePassword('12345'), '密码至少6位');
-    });
+  setUp(() {
+    mockAuthService = MockIAuthService();
+    container = ProviderContainer(
+      overrides: [authServiceProvider.overrideWithValue(mockAuthService)],
+    );
   });
 
-  group('LoginViewModel', () {
-    late MockIAuthService mockAuthService;
-    late ProviderContainer container;
+  tearDown(() {
+    container.dispose();
+  });
 
-    setUp(() {
-      mockAuthService = MockIAuthService();
-      container = ProviderContainer(
-        overrides: [authServiceProvider.overrideWithValue(mockAuthService)],
-      );
-    });
-
-    tearDown(() {
-      container.dispose();
-    });
-
-    test('initial state is correct', () {
+  group('登录ViewModel', () {
+    test('初始状态正确', () {
       final state = container.read(loginViewModelProvider);
       expect(state.countryCode, '+86');
       expect(state.phone, '');
@@ -67,7 +40,7 @@ void main() {
       expect(state.isLoginEnabled, false);
     });
 
-    test('setPhone updates state and validates', () {
+    test('设置手机号更新状态并验证', () {
       final vm = container.read(loginViewModelProvider.notifier);
       vm.setPhone('13812345678');
 
@@ -76,7 +49,7 @@ void main() {
       expect(state.phoneError, isNull);
     });
 
-    test('setPhone with invalid phone sets error', () {
+    test('设置无效手机号显示错误', () {
       final vm = container.read(loginViewModelProvider.notifier);
       vm.setPhone('123');
 
@@ -84,7 +57,7 @@ void main() {
       expect(state.phoneError, '手机号格式错误');
     });
 
-    test('setPassword updates state and validates', () {
+    test('设置密码更新状态并验证', () {
       final vm = container.read(loginViewModelProvider.notifier);
       vm.setPassword('password123');
 
@@ -93,7 +66,7 @@ void main() {
       expect(state.passwordError, isNull);
     });
 
-    test('togglePasswordVisibility toggles state', () {
+    test('切换密码可见性', () {
       final vm = container.read(loginViewModelProvider.notifier);
       expect(container.read(loginViewModelProvider).isPasswordVisible, false);
 
@@ -104,12 +77,11 @@ void main() {
       expect(container.read(loginViewModelProvider).isPasswordVisible, false);
     });
 
-    test('login success returns true', () async {
+    test('登录成功返回true', () async {
       when(
         mockAuthService.login('+86', '13812345678', 'password123'),
       ).thenAnswer(
-        (_) async =>
-            const LoginSuccess(LoginCredential(userId: 'user123')),
+        (_) async => const LoginSuccess(LoginCredential(userId: 'user123')),
       );
 
       final vm = container.read(loginViewModelProvider.notifier);
@@ -123,7 +95,7 @@ void main() {
       ).called(1);
     });
 
-    test('login returns multiple users sets pendingUsers', () async {
+    test('登录返回多用户时设置pendingUsers', () async {
       final users = [
         const UserOption(userId: 'user1', nickname: '用户1'),
         const UserOption(userId: 'user2', nickname: '用户2'),
@@ -144,7 +116,7 @@ void main() {
       expect(state.errorMessage, isNull);
     });
 
-    test('selectUserAndContinue success returns true', () async {
+    test('选择用户继续登录成功返回true', () async {
       // 先触发登录获取多用户，再选择用户继续
       final users = [
         const UserOption(userId: 'user1', nickname: '用户1'),
@@ -182,7 +154,7 @@ void main() {
       ).called(1);
     });
 
-    test('selectUserAndContinue failure sets error', () async {
+    test('选择用户继续登录失败设置错误', () async {
       final users = [
         const UserOption(userId: 'user1', nickname: '用户1'),
       ];
@@ -211,7 +183,7 @@ void main() {
       expect(state.errorMessage, '服务器错误');
     });
 
-    test('cancelUserSelection clears pendingUsers', () async {
+    test('取消用户选择清空pendingUsers', () async {
       final users = [
         const UserOption(userId: 'user1', nickname: '用户1'),
       ];
@@ -230,7 +202,7 @@ void main() {
       expect(container.read(loginViewModelProvider).pendingUsers, isNull);
     });
 
-    test('login failure returns false and sets error', () async {
+    test('登录失败返回false并设置错误', () async {
       when(
         mockAuthService.login(any, any, any),
       ).thenThrow(const AuthException(AuthError.invalidCredentials));
