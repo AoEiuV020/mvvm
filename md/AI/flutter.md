@@ -158,4 +158,17 @@ md/规划/通用
 
 1. .github/instructions/project.instructions.md:47 进一步简化， 考虑各级都有readme了， 不要太重复的介绍，简单说明就好，重点强调包含哪类东西，
 
+1. md/规划/flutter/路由导航.md 符合最新设计吗？
+1. 按最新设计页面挑战应该在哪一层定义？sdkui或者app？
+1. 我希望有这么个sdkui层， 但目前看来sdkui模块职责似乎太少了， 
 
+1. 对， 我希望app层更薄， 
+
+1. 你这路由设计有考虑projects/flutter_im/packages/im_ui_core/lib/src/providers/sdk_providers.dart projects/flutter_im/packages/im_ui_core/lib/src/interfaces/login_provider.dart 可插拔吗？
+1. 没问题的话im_sdkui先实现已有的登录页相关的组装，
+
+1. projects/flutter_im/packages/im_sdkui/lib/src/router/app_router.dart:29你这不是完全没有组装吗？点击注册当然是打开注册页了， 连这都需要配置像话吗？
+
+1. 两个`go('/register')`，这种设计真的好吗，
+
+1. 这种确实看起来不错， 但是能实现之前要求的模块可插拔吗？projects/flutter_im/packages/im_login/lib/src/login_provider_impl.dart这个是多余的吗？

@@ -13,11 +13,16 @@ dependencies:
     sdk: flutter
   im_ui_core: ^1.0.0
   im_login: ^1.0.0
+  go_router: ^15.1.3
+  flutter_riverpod: ^3.1.0
+  riverpod_annotation: ^4.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
+  riverpod_generator: ^4.0.0
+  build_runner: ^2.4.15
 
 flutter:
 
