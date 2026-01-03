@@ -78,3 +78,8 @@ Try replacing the use of the deprecated member with the replacement.dartdeprecat
 1. packages/im_sdkui/lib/src/providers/sdk_providers.dart:24 这个用法对吗？这样watch有可能导致无法释放内存泄露吗？
 
 1. 有点没明白， 是不是现在app模块只要手动添加sdk的provider，然后内部使用的authServiceProvider就自动准备好了？这符合常见做法吗？
+
+1. 这个警告为什么不处理？
+[im_sdkui]: warning - pubspec.yaml:16:5 - Publishable packages can't have 'path' dependencies. Try adding a 'publish_to: none' entry to mark the package as not for publishing or remove the path dependency. - invalid_dependency
+
+1. 不对， 最新的flutter workspace不需要path，可以publish，你搜一下怎么写， 

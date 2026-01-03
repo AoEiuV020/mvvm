@@ -1,7 +1,6 @@
 name: im_sdkui
 description: "IM SDK UI - 基础 UI SDK"
 version: 0.0.1
-homepage:
 
 environment:
   sdk: ^3.10.4
@@ -12,8 +11,7 @@ resolution: workspace
 dependencies:
   flutter:
     sdk: flutter
-  im_sdk_api:
-    path: ../im_sdk_api
+  im_sdk_api: ^1.0.0
   flutter_riverpod: ^3.1.0
   riverpod_annotation: ^4.0.0
   freezed_annotation: ^3.0.0

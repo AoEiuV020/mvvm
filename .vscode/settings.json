@@ -8,5 +8,11 @@
         "flutter test": true,
         "dart test": true,
         "melos": true,
-    }
+    },
+    "chat.tools.urls.autoApprove": {
+        "https://dart.dev": {
+            "approveRequest": true,
+            "approveResponse": true
+        }
+    },
 }

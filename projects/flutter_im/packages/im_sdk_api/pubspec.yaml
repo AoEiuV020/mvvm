@@ -1,7 +1,6 @@
 name: im_sdk_api
-description: A starting point for Dart libraries or applications.
+description: "IM SDK API - 公共接口和模型"
 version: 1.0.0
-# repository: https://github.com/my_org/my_repo
 
 environment:
   sdk: ^3.10.4
