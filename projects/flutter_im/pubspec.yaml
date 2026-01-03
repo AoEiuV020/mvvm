@@ -4,6 +4,10 @@ publish_to: none
 environment:
   sdk: ^3.6.0
 
+workspace:
+  - packages/im_sdk_api
+  - packages/im_sdkui
+
 dev_dependencies:
   melos: ^7.3.0
 
