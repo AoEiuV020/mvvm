@@ -1,9 +1,5 @@
-// Login
-export 'src/login/login_page.dart';
-export 'src/login/login_state.dart';
-export 'src/login/login_validator.dart';
-export 'src/login/login_viewmodel.dart';
-export 'src/login/login_viewmodel_interface.dart';
+/// IM SDK UI 组装层 - 功能模块注入和配置
+library;
 
-// Providers
-export 'src/providers/sdk_providers.dart';
+// 重新导出功能模块的公共 API
+export 'package:im_login/im_login.dart';

@@ -126,3 +126,36 @@ melos exec --scope=im_app -- flutter build macos --debug
 
 1. 测试文件能否加上lib/src中相同的层级关系， 
 1. projects/flutter_im/packages/im_sdkui/test/im_sdkui_test.dart这个文件名是否不合适， 测试文件应该和源文件一一对应吧，至少view/vm/model分开测试， 目前im_sdkui_test似乎混合了vm/model，这块是否需要在哪个文档约束一下， 
+
+1. 看看这个模块结构是否能优化， 我还是很在意sdk ui层能不能进一步拆分， 是否有必要进一步拆分，以示解耦，
+
+1. 那么考虑比如emoji支持， 我想单独一个模块隔离资源和面板控件，这种情况sdkui能正常调用吗？
+
+1. 这就是问题了，你想的是sdkui依赖emoji，我希望emoji和group/enterprise类似独立，方便删除，group基本是以页面为单位，不需要依赖也可以通过路径启动，但是emoji这种有控件需要被依赖， 这种情况真的不需要拆分sdkui搞个抽象层吗？
+
+1. 就是这个意思， 添加core层， 让功能ui模块可插拔， 重新设计完善一下模块结构和模块职责，更新文档，
+
+1. 按新设计吧通用的部分转移到md/规划/通用/多模块结构.md，
+
+1. 感觉好像差点意思， im_ui_core依然是大而全的，只能这样吗？我以为是有一层只负责整体结构热插拔相关，不包含具体功能页面，
+
+1. md/规划/flutter/项目管理.md:51 新增模块使用脚本 projects/flutter_im/script/package_create.sh，
+`script/package_create.sh <moduleName> [flutter]`
+1. 按新规划创建最最基础的模块， 其他先别实现，只做登录， 
+
+1. imsdkProvider肯定是不能放login模块的， 需要被所有依赖， 同时又依赖sdk，那不就是im_ui_interface？是否应该改个名整合所有这种被所有ui模块依赖又依赖sdk的东西， 
+
+
+1. 感觉im_sdkui的职责太薄了， 但是先这样吧， 按最新设计更新md/规划/flutter中的文档，注意强调这种可插拔设计，但文档中并不需要说什么模块是可选的，而是加速各种模块都存在，描写最终设计约束，
+1. 更新通用文档
+md/规划/SDK
+md/规划/通用
+.github/instructions/project.instructions.md
+注意使用尽可能通用的语言， 不要有针对某种框架具体的实现代码，
+
+1. .github/instructions/project.instructions.md:80 别把没实现的都给删了啊， 我说了各种文档是假设所有模块已经实现的最终设计文档， 
+1. 考虑给md/规划中各级加上readme，而.github/instructions/project.instructions.md减少一些内容，多描述几个readme, 比如md/规划/通用要有个readme按功能结构写上所有未来需要的md文件，
+
+1. .github/instructions/project.instructions.md:47 进一步简化， 考虑各级都有readme了， 不要太重复的介绍，简单说明就好，重点强调包含哪类东西，
+
+

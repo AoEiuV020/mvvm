@@ -1,7 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:im_sdk_api/im_sdk_api.dart';
-import 'package:im_sdkui/im_sdkui.dart';
+import 'package:im_login/im_login.dart';
+import 'package:im_ui_core/im_ui_core.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 

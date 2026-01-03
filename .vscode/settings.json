@@ -1,7 +1,8 @@
 {
     "cSpell.words": [
         "IMSDK",
-        "sdkui"
+        "sdkui",
+        "uikit"
     ],
     "chat.tools.terminal.autoApprove": {
         "dart run build_runner build": true,

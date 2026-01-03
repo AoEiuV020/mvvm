@@ -5,8 +5,10 @@ environment:
   sdk: ^3.6.0
 
 workspace:
+  - packages/im_login
   - packages/im_sdk_api
   - packages/im_sdkui
+  - packages/im_ui_core
 
 dev_dependencies:
   melos: ^7.3.0

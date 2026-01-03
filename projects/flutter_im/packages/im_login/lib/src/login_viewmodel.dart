@@ -1,7 +1,7 @@
 import 'package:im_sdk_api/im_sdk_api.dart';
+import 'package:im_ui_core/im_ui_core.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../providers/sdk_providers.dart';
 import 'login_state.dart';
 import 'login_validator.dart';
 import 'login_viewmodel_interface.dart';

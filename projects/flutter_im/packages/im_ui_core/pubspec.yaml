@@ -1,0 +1,23 @@
+name: im_ui_core
+description: UI 核心层 - 接口定义和公共 Providers
+version: 1.0.0
+
+environment:
+  sdk: ^3.10.4
+  flutter: ">=3.0.0"
+
+resolution: workspace
+
+dependencies:
+  flutter:
+    sdk: flutter
+  im_sdk_api: ^1.0.0
+  flutter_riverpod: ^3.1.0
+  riverpod_annotation: ^4.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  riverpod_generator: ^4.0.0
+  build_runner: ^2.4.15
