@@ -56,11 +56,7 @@ class LoginViewModel extends _$LoginViewModel implements ILoginViewModel {
     state = state.copyWith(isLoading: true, errorMessage: null);
 
     try {
-      await _authService.login(
-        state.countryCode,
-        state.phone,
-        state.password,
-      );
+      await _authService.login(state.countryCode, state.phone, state.password);
       state = state.copyWith(isLoading: false);
       return true;
     } on AuthException catch (e) {

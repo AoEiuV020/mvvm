@@ -15,24 +15,25 @@ melos:
   scripts:
     outdated:
       exec: dart pub outdated
-    upgrade:
-      exec: dart pub upgrade
-    gen:
-      exec: dart run build_runner build --delete-conflicting-outputs
-      packageFilters:
-        dependsOn: build_runner
-    analyze:
-      exec: dart analyze .
+      description: Check outdated dependencies
+    format:
+      exec: dart format .
+      description: Format code
     fix:
-      run: dart fix --apply .
-      exec:
-        concurrency: 1
-    sort:
-      exec: dart pub global run import_sorter:main --no-comments
-    precommit: melos fix && melos format && melos sort
+      exec: dart fix --apply .
+      description: Apply dart fixes
     test:
-      run: flutter test --no-pub --coverage
+      run: flutter test --no-pub
       exec:
         concurrency: 1
       packageFilters:
         dirExists: test
+      description: Run tests
+    analyze:
+      exec: dart analyze .
+      description: Analyze code
+    gen:
+      exec: dart run build_runner build --delete-conflicting-outputs
+      packageFilters:
+        dependsOn: build_runner
+      description: Run build_runner

@@ -28,11 +28,14 @@ class LoginPage extends ConsumerWidget {
     final vm = ref.read(loginViewModelProvider.notifier);
 
     // 监听错误消息显示 Toast
-    ref.listen(loginViewModelProvider.select((s) => s.errorMessage), (_, errorMessage) {
+    ref.listen(loginViewModelProvider.select((s) => s.errorMessage), (
+      _,
+      errorMessage,
+    ) {
       if (errorMessage != null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(errorMessage)),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(errorMessage)));
       }
     });
 

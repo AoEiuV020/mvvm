@@ -1,10 +1,5 @@
 /// 用户状态枚举
-enum UserStatus {
-  online,
-  offline,
-  busy,
-  away,
-}
+enum UserStatus { online, offline, busy, away }
 
 /// 用户实体
 class User {

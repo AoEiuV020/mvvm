@@ -5,14 +5,11 @@ class SDKConfig {
   final String appId;
   final String serverUrl;
 
-  const SDKConfig({
-    required this.appId,
-    required this.serverUrl,
-  });
+  const SDKConfig({required this.appId, required this.serverUrl});
 }
 
 /// IM SDK 主接口
-/// 
+///
 /// SDK 是一个整体，所有服务通过 SDK 实例获取。
 /// App 层只需 override imsdkProvider，不需要单独 override 各个 Service Provider。
 abstract class IMSDK {

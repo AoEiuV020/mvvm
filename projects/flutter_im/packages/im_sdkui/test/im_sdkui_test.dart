@@ -43,9 +43,7 @@ void main() {
     setUp(() {
       mockAuthService = MockIAuthService();
       container = ProviderContainer(
-        overrides: [
-          authServiceProvider.overrideWithValue(mockAuthService),
-        ],
+        overrides: [authServiceProvider.overrideWithValue(mockAuthService)],
       );
     });
 
@@ -100,8 +98,9 @@ void main() {
     });
 
     test('login success returns true', () async {
-      when(mockAuthService.login('+86', '13812345678', 'password123'))
-          .thenAnswer((_) async => const LoginCredential(userId: 'user123'));
+      when(
+        mockAuthService.login('+86', '13812345678', 'password123'),
+      ).thenAnswer((_) async => const LoginCredential(userId: 'user123'));
 
       final vm = container.read(loginViewModelProvider.notifier);
       vm.setPhone('13812345678');
@@ -109,12 +108,15 @@ void main() {
 
       final result = await vm.login();
       expect(result, true);
-      verify(mockAuthService.login('+86', '13812345678', 'password123')).called(1);
+      verify(
+        mockAuthService.login('+86', '13812345678', 'password123'),
+      ).called(1);
     });
 
     test('login failure returns false and sets error', () async {
-      when(mockAuthService.login(any, any, any))
-          .thenThrow(const AuthException(AuthError.invalidCredentials));
+      when(
+        mockAuthService.login(any, any, any),
+      ).thenThrow(const AuthException(AuthError.invalidCredentials));
 
       final vm = container.read(loginViewModelProvider.notifier);
       vm.setPhone('13812345678');

@@ -83,3 +83,31 @@ Try replacing the use of the deprecated member with the replacement.dartdeprecat
 [im_sdkui]: warning - pubspec.yaml:16:5 - Publishable packages can't have 'path' dependencies. Try adding a 'publish_to: none' entry to mark the package as not for publishing or remove the path dependency. - invalid_dependency
 
 1. 不对， 最新的flutter workspace不需要path，可以publish，你搜一下怎么写， 
+
+1. 这种项目模块管理单独一个文件写到md/规划/flutter介绍并约束， 
+1. flutter workspace + melos， 新melos脚本配置在projects/flutter_im/pubspec.yaml， 
+1. 允许使用如下melos命令，
+- bs
+- outdated
+- format
+- fix
+- test
+- analyze
+- exec
+1. 不允许使用flutter/dart命令， 有需要时通过melos在指定模块执行flutter/dart命令，比如
+melos exec --scope=im_app -- flutter build macos --debug
+
+1. md/规划/flutter/项目管理.md:11 别写和md/规划/flutter/项目结构.md重复的内容，重点是项目管理本身，
+
+1. melos除了bs/exec以外的非内置脚本允许时加上--no-select自动允许所有模块，
+
+1. 谁™让你改projects/flutter_im/pubspec.yaml了， 我是说melos命令比如melos test 运行时要加上--no-select
+`melos test --no-select `
+
+
+1. 项目管理通用说明加进md/规划/通用/框架目录约束.md
+1. .github/instructions添加一个通用的文档约束AI修改代码后需要根据 项目管理.md 执行同步依赖/编译/测试，
+
+1. md/规划/通用/框架目录约束.md:21 这些并不通用啊， 检查一下通用的文档不能出现不通用的内容， 
+
+1. .github/instructions/code-quality.instructions.md:25 反复说不要写不通用的内容， 
