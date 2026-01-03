@@ -15,6 +15,21 @@ applyTo: '**'
 
 ### Model 层
 
+**定义：** Model 层不是一个具体的类，而是多个组件的统称。
+
+**组成：**
+- **Service/Repository** - 数据来源（如 IAuthService、IMessageRepository）
+- **Entity/数据类** - 业务实体（如 User、Message）
+- **工具类** - Validator、Formatter 等
+
+**与 SDK 的关系：**
+SDK 模块提供的所有内容都属于 Model 层：
+- SDK Service 接口 = Model 层的 Service
+- SDK Entity 类 = Model 层的数据类
+- SDK Exception 类型 = Model 层的异常定义
+
+ViewModel 通过依赖注入直接使用 SDK 接口，不需要额外的 "XxxModel" 包装类。
+
 **职责：**
 - 定义数据结构和业务实体
 - 实现业务逻辑和规则
@@ -65,12 +80,37 @@ applyTo: '**'
 - 绑定 ViewModel 的状态
 - 将用户操作转发给 ViewModel
 - UI 动画和过渡效果
+- 执行导航跳转
+- 根据状态显示 Toast/Dialog
 
 **禁止：**
 - ❌ 直接访问 Model 层
 - ❌ 包含业务逻辑
 - ❌ 直接进行网络请求或数据持久化
 - ❌ 在 View 内部维护业务状态
+- ❌ 决定何时显示 Toast/Dialog（由 VM 状态决定）
+
+---
+
+### 边界约束（唯一归属）
+
+| 场景 | 归属层 | 说明 |
+|------|--------|------|
+| 点击事件处理逻辑 | ViewModel | View 只调用 VM 方法，不含判断逻辑 |
+| 导航跳转执行 | View | VM 返回结果/设置状态，View 执行跳转 |
+| Toast/Dialog 触发 | View | VM 设置 errorMessage 等状态，View 监听并显示 |
+| 日期/数字格式化 | Model | 工具类，可复用 |
+| 文本截断/省略号 | View | 纯 UI 样式 |
+| 列表筛选逻辑 | ViewModel | 调用 Model 工具方法 |
+| 列表排序逻辑 | ViewModel | 调用 Model 工具方法 |
+| 派生状态（如 isLoginEnabled） | ViewModel | computed getter |
+| Loading 状态管理 | ViewModel | isLoading 字段 |
+| 输入防抖/节流 | ViewModel | 防止重复请求 |
+| 权限判断 | ViewModel | 提供 canXxx 状态 |
+| 动画控制 | View | 纯 UI，VM 不感知 |
+| 表单校验规则 | Model | Validator 类 |
+| 表单校验触发 | ViewModel | 输入变化时调用 Validator |
+| 校验错误显示 | View | 绑定 VM 的 xxxError 状态 |
 
 ---
 
@@ -81,6 +121,22 @@ applyTo: '**'
                       ↓
 状态更新 ← View ← ViewModel ← Model
 ```
+
+### 异常处理约束
+
+| 层 | 策略 |
+|----|------|
+| Model | 抛出业务异常（如 AuthException），不捕获、不打日志 |
+| ViewModel | 唯一捕获点，catch 后打印日志、设置 errorMessage |
+| View | 不处理异常，只根据 errorMessage 状态显示 |
+
+**强制规则：**
+- ✅ 日志只打印一次（在 ViewModel 层）
+- ✅ Model 层使用语义明确的自定义 Exception 类型
+- ✅ ViewModel 捕获后必须处理（设置状态或重新抛出）
+- ❌ 禁止层层 catch 打印日志
+- ❌ 禁止 catch 后吞掉异常不处理
+- ❌ 禁止在 View 层 try-catch
 
 ### 命名约定
 
