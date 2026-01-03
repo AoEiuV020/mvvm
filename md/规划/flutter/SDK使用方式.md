@@ -3,16 +3,22 @@
 ## SDK Provider 配置
 
 ```dart
-@riverpod
+/// SDK 主 Provider（唯一需要 override 的）
+@Riverpod(keepAlive: true)
 IMSDK imsdk(Ref ref) {
   throw UnimplementedError('需要在 ProviderScope 中 override');
 }
 
-@riverpod
-IAuthService authService(Ref ref) => ref.watch(imsdkProvider).authService;
+/// Service Provider（派生自 SDK，使用 ref.read）
+@Riverpod(keepAlive: true)
+IAuthService authService(Ref ref) => ref.read(imsdkProvider).authService;
 
 // 其他服务同理
 ```
+
+**说明：**
+- 只需 override `imsdkProvider`，各 Service Provider 自动派生
+- 使用 `ref.read` 而非 `ref.watch`，因为 SDK 不会变化
 
 ## 初始化
 

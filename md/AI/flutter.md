@@ -72,3 +72,9 @@ Try replacing the use of the deprecated member with the replacement.dartdeprecat
 1. 记住md文档中记录用法， 
 
 1. flutter analyze 全部问题处理，
+
+1. 这用法对吗， 单独的authServiceProvider?是这样用的吗， 参考md/规划/SDK/概述.md，sdk是一个整体， 这种情况下能绕过sdk提供具体的provider吗？是mvvm最佳实践吗？
+
+1. packages/im_sdkui/lib/src/providers/sdk_providers.dart:24 这个用法对吗？这样watch有可能导致无法释放内存泄露吗？
+
+1. 有点没明白， 是不是现在app模块只要手动添加sdk的provider，然后内部使用的authServiceProvider就自动准备好了？这符合常见做法吗？
