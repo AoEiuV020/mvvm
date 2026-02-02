@@ -2,80 +2,62 @@
 applyTo: '**'
 ---
 
-## MVVM 架构约束规范
+## 通用MVVM约束
+
+与具体语言和项目无关的架构约束。
 
 ### 核心原则
 
 - **单向依赖**：View → ViewModel → Model，禁止反向依赖
 - **职责分离**：各层只处理本层职责，不越界
-- **可测试性**：ViewModel 和 Model 必须可独立测试，不依赖 UI 框架
-- **接口优先**：ViewModel 和 Model 必须定义接口，实现类依赖接口而非具体类
-
----
+- **可测试性**：ViewModel 和 Model 可独立测试，不依赖 UI 框架
 
 ### Model 层
 
-**定义：** Model 层不是一个具体的类，而是多个组件的统称。
+**定义**：Model 层是数据和业务逻辑的统称，不是单一类。
 
-**组成：**
-- **Service/Repository** - 数据来源（如 IAuthService、IMessageRepository）
-- **Entity/数据类** - 业务实体（如 User、Message）
-- **工具类** - Validator、Formatter 等
+**组成**：
 
-**与 SDK 的关系：**
-SDK 模块提供的所有内容都属于 Model 层：
-- SDK Service 接口 = Model 层的 Service
-- SDK Entity 类 = Model 层的数据类
-- SDK Exception 类型 = Model 层的异常定义
+- **Service** - 业务操作（如 AuthService、MessageService）
+- **Repository** - 数据访问（如 MessageRepository）
+- **Entity** - 业务实体（如 User、Message）
+- **Utility** - 工具类（如 Validator、Formatter）
 
-ViewModel 通过依赖注入直接使用 SDK 接口，不需要额外的 "XxxModel" 包装类。
+**职责**：
 
-**职责：**
 - 定义数据结构和业务实体
 - 实现业务逻辑和规则
 - 数据持久化和网络请求
 - 数据验证和转换
-- **表单校验逻辑**（Validator 类）
 
-**强制要求：**
-- ✅ Repository/Service 必须定义接口（如 `IMessageRepository`）
-- ✅ 实现类实现该接口（如 `MessageRepository`）
-- ✅ 表单校验逻辑定义在 Model 层（如 `PhoneValidator`）
+**禁止**：
 
-**禁止：**
-- ❌ 引用 View 或 ViewModel
-- ❌ 包含任何 UI 相关代码或依赖
-- ❌ 直接操作 UI 状态
-- ❌ 持有 UI 框架的类型
-
----
+- 引用 View 或 ViewModel
+- 包含任何 UI 相关代码
+- 直接操作 UI 状态
 
 ### ViewModel 层
 
-**职责：**
+**职责**：
+
 - 持有和管理 UI 状态
 - 调用 Model 层获取/处理数据
 - 将 Model 数据转换为 View 可用的格式
 - 处理用户交互逻辑
 - 暴露可观察的状态给 View
 
-**强制要求：**
-- ✅ 必须定义 ViewModel 接口（如 `IChatViewModel`）
-- ✅ 实现类实现该接口（如 `ChatViewModel`）
-- ✅ 依赖 Model 层的接口，而非具体实现
+**禁止**：
 
-**禁止：**
-- ❌ 引用具体的 View 实现
-- ❌ 直接操作 UI 组件
-- ❌ 包含 UI 框架特定的代码（如布局、样式）
-- ❌ 持有 View 的引用
-- ❌ 实现业务逻辑（应委托给 Model）
-
----
+- 引用具体的 View 实现
+- 直接操作 UI 组件
+- 包含 UI 框架特定的代码（如布局、样式）
+- 持有 View 的引用
+- 实现复杂业务逻辑（应调用 Model 层 Service/Utility）
 
 ### View 层
 
-**职责：**
+**职责**：
+
 - UI 布局和渲染
 - 绑定 ViewModel 的状态
 - 将用户操作转发给 ViewModel
@@ -83,119 +65,51 @@ ViewModel 通过依赖注入直接使用 SDK 接口，不需要额外的 "XxxMod
 - 执行导航跳转
 - 根据状态显示 Toast/Dialog
 
-**禁止：**
-- ❌ 直接访问 Model 层
-- ❌ 包含业务逻辑
-- ❌ 直接进行网络请求或数据持久化
-- ❌ 在 View 内部维护业务状态
-- ❌ 决定何时显示 Toast/Dialog（由 VM 状态决定）
+**禁止**：
 
----
+- 直接访问 Model 层
+- 包含业务逻辑
+- 直接进行网络请求或数据持久化
+- 在 View 内部维护业务状态
 
 ### 边界约束（唯一归属）
 
-| 场景 | 归属层 | 说明 |
-|------|--------|------|
-| 点击事件处理逻辑 | ViewModel | View 只调用 VM 方法，不含判断逻辑 |
-| 导航跳转执行 | View | VM 返回结果/设置状态，View 执行跳转 |
-| Toast/Dialog 触发 | View | VM 设置 errorMessage 等状态，View 监听并显示 |
-| 日期/数字格式化 | Model | 工具类，可复用 |
-| 文本截断/省略号 | View | 纯 UI 样式 |
-| 列表筛选逻辑 | ViewModel | 调用 Model 工具方法 |
-| 列表排序逻辑 | ViewModel | 调用 Model 工具方法 |
-| 派生状态（如 isLoginEnabled） | ViewModel | computed getter |
-| Loading 状态管理 | ViewModel | isLoading 字段 |
-| 输入防抖/节流 | ViewModel | 防止重复请求 |
-| 权限判断 | ViewModel | 提供 canXxx 状态 |
-| 动画控制 | View | 纯 UI，VM 不感知 |
-| 表单校验规则 | Model | Validator 类 |
-| 表单校验触发 | ViewModel | 输入变化时调用 Validator |
-| 校验错误显示 | View | 绑定 VM 的 xxxError 状态 |
-| 流程中断等待用户选择 | ViewModel | 设置待选列表状态，View 显示选择 UI |
+| 场景                          | 归属层    | 说明                                         |
+| ----------------------------- | --------- | -------------------------------------------- |
+| 点击事件处理逻辑              | ViewModel | View 只调用 VM 方法，不含判断逻辑            |
+| 导航跳转执行                  | View      | VM 返回结果/设置状态，View 执行跳转          |
+| Toast/Dialog 触发             | View      | VM 设置 errorMessage 等状态，View 监听并显示 |
+| 组件截图                      | View      | 依赖 UI 上下文，纯 UI 操作                   |
+| 保存到相册/分享               | Model     | 封装为 Utility，涉及权限和系统服务           |
+| 日期/数字格式化               | Model     | 工具类，可复用                               |
+| 文本截断/省略号               | View      | 纯 UI 样式                                   |
+| 列表筛选/排序逻辑             | ViewModel | 调用 Model 工具方法                          |
+| 派生状态（如 isLoginEnabled） | ViewModel | computed getter                              |
+| Loading 状态管理              | ViewModel | isLoading 字段                               |
+| 点击防抖                      | View      | 防止快速重复点击（时间间隔防抖）             |
+| 请求防抖                      | ViewModel | 防止重复请求（isLoading/isXxxing 状态）      |
+| 权限判断                      | ViewModel | 提供 canXxx 状态                             |
+| 动画控制                      | View      | 纯 UI，VM 不感知                             |
+| 表单校验规则                  | Model     | Validator 类                                 |
+| 表单校验触发                  | ViewModel | 输入变化时调用 Validator                     |
+| 校验错误显示                  | View      | 绑定 VM 的 xxxError 状态                     |
+| 流程中断等待用户选择          | ViewModel | 设置待选列表状态，View 显示选择 UI           |
 
----
+### ViewModel 触发 View 行为
 
-### 用户交互中断模式
+#### 模式一：单向通知
 
-业务流程中需要用户确认或选择时，根据复杂度选择对应模式：
+适用场景：Toast、导航、简单弹窗等单向事件
 
----
+- ViewModel 设置状态，View 监听并执行
+- 无需 View 回调
 
-#### 模式一：View 直接处理
+#### 模式二：双向交互
 
-**适用场景：** 纯 UI 确认，无业务判断逻辑
+适用场景：ViewModel 请求 View 层能力（如截图）、需用户选择后继续
 
-**特征：**
-- 确认内容固定（如"确定删除？"）
-- 无需根据业务状态决定是否显示
-- 确认后直接调用 ViewModel 方法
-
-**实现：**
-```
-View: 用户点击操作 → 显示确认弹窗 → 用户确认 → vm.execute(params)
-```
-
-ViewModel 不感知确认过程。
-
----
-
-#### 模式二：ViewModel 控制确认状态
-
-**适用场景：** 需要业务逻辑判断或动态内容
-
-**特征：**
-- 需要根据权限/条件决定是否显示确认
-- 确认内容需要从业务数据动态生成
-- 需要统一管理确认状态
-
-**实现：**
-```
-ViewModel:
-  pendingAction: PendingAction?  // 非空时 View 显示确认 UI
-  
-  requestAction(params) → 设置 pendingAction
-  confirmAction() → 执行操作，清空 pendingAction
-  cancelAction() → 清空 pendingAction
-
-View: 监听 pendingAction，非空时显示确认 UI
-```
-
----
-
-#### 模式三：流程中断等待选择
-
-**适用场景：** 异步流程中需要用户从列表中选择
-
-**特征：**
-- Model 返回多个选项，需用户选择一个继续
-- 选择后需要继续执行剩余流程
-- Model 保持无状态
-
-**Model 约束：**
-- 通过可选参数区分首次调用和继续调用
-- 无 selectedId：首次调用，可能返回待选列表
-- 有 selectedId：继续调用，直接完成流程
-
-**ViewModel 职责：**
-1. 执行到需要选择时，设置待选列表状态（如 `pendingItems`）
-2. 保存必要的输入参数用于继续调用
-3. 暴露继续方法，使用保存的参数 + 选择结果重新调用 Model
-
-**View 职责：**
-1. 监听待选列表状态
-2. 状态非空时显示选择 UI
-3. 用户选择后调用 ViewModel 的继续方法
-
-**流程：**
-```
-execute() → Model 返回待选列表 → 设置 pendingItems → View 显示选择
-                                                         ↓
-selectItem(id) ← 用户点击选择 ← View 监听 pendingItems
-         ↓
-Model.execute(params, selectedId: id) → 完成/失败
-```
-
----
+- ViewModel 设置状态请求 View 响应
+- View 执行后回调 ViewModel 继续流程
 
 ### 数据流向
 
@@ -207,36 +121,67 @@ Model.execute(params, selectedId: id) → 完成/失败
 
 ### 异常处理约束
 
-| 层 | 策略 |
-|----|------|
-| Model | 抛出业务异常（如 AuthException），不捕获、不打日志 |
+| 层        | 策略                                            |
+| --------- | ----------------------------------------------- |
+| Model     | 抛出异常，不捕获、不打日志                      |
 | ViewModel | 唯一捕获点，catch 后打印日志、设置 errorMessage |
-| View | 不处理异常，只根据 errorMessage 状态显示 |
+| View      | 不处理异常，只根据 errorMessage 状态显示        |
 
-**强制规则：**
-- ✅ 日志只打印一次（在 ViewModel 层）
-- ✅ Model 层使用语义明确的自定义 Exception 类型
-- ✅ ViewModel 捕获后必须处理（设置状态或重新抛出）
-- ❌ 禁止层层 catch 打印日志
-- ❌ 禁止 catch 后吞掉异常不处理
-- ❌ 禁止在 View 层 try-catch
+**强制规则**：
+
+- 日志只打印一次（在 ViewModel 层）
+- ViewModel 捕获后必须处理（设置状态或重新抛出）
+- 禁止层层 catch 打印日志
+- 禁止 catch 后吞掉异常不处理
+- 禁止在 View 层 try-catch
+
+### 表单校验
+
+| 职责     | 归属层    | 说明                     |
+| -------- | --------- | ------------------------ |
+| 校验规则 | Model     | Validator 类定义校验逻辑 |
+| 校验触发 | ViewModel | 输入变化时调用 Validator |
+| 校验结果 | ViewModel | 设置 xxxError 字段       |
+| 错误显示 | View      | 绑定 VM 的 xxxError 状态 |
+
+### ViewModel 代码复用
+
+同一 View 对应多个差异化 ViewModel 时：
+
+- 定义基类包含共享逻辑（`XxxViewModelBase`）
+- 子类实现差异部分
+
+### ViewModel 拆分
+
+当 ViewModel 超过 300 行时，按功能域拆分为多个子 ViewModel：
+
+- 主 ViewModel 使用组合模式持有子 ViewModel
+- 子 ViewModel 各自负责独立功能域
+- 事件监听在对应子 ViewModel 中注册/移除
+
+#### 子 ViewModel 间参数传递
+
+子 ViewModel 需要访问主 ViewModel 的动态属性时，使用回调函数延迟获取：
+
+- 主 VM 构造时传递回调：`() => this.chatName`
+- 子 VM 存储回调，使用时调用获取最新值
+
+适用场景：属性值构造时未确定、可能动态变化、需访问计算属性
 
 ### 命名约定
 
-- Model 接口：`IXxxRepository`, `IXxxService`
-- Model 实现：`XxxRepository`, `XxxService`
-- Model 实体：`XxxModel`, `XxxEntity`
-- ViewModel 接口：`IXxxViewModel`
+- ViewModel 基类：`XxxViewModelBase`（有多个子类时）
 - ViewModel 实现：`XxxViewModel`
-- View：`XxxView`, `XxxPage`, `XxxScreen`, `XxxWidget`
+- View：`XxxView`、`XxxPage`
+- Model 工具类：`XxxValidator`、`XxxFormatter`
+- 数据源：`XxxDataSource`（封装 SDK 交互）
 
 ### 检查清单
 
 生成代码前确认：
-1. [ ] 该代码属于哪一层？
-2. [ ] 是否存在跨层依赖？
-3. [ ] 业务逻辑是否在 Model 层？
-4. [ ] UI 状态是否由 ViewModel 管理？
-5. [ ] View 是否只做展示和事件转发？
-6. [ ] ViewModel/Repository/Service 是否定义了接口？
-7. [ ] 依赖注入是否使用接口而非具体类？
+
+1. 该代码属于哪一层？
+2. 是否存在跨层依赖？
+3. 业务逻辑是否在 Model 层？
+4. UI 状态是否由 ViewModel 管理？
+5. View 是否只做展示和事件转发？
