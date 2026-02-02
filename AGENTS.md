@@ -28,7 +28,7 @@
 
 ### 允许英文
 - 标识符（变量名、函数名、类名）
-- 技术术语（Widget、Provider）
+- 技术术语
 - SDK/API 接口名
 
 ## 代码质量
@@ -45,20 +45,10 @@
 
 ```
 md_mvvm/
-├── md/
-│   ├── AI/        # ❌ AI禁止编辑
-│   └── 规划/      # 功能规划文档
-├── projects/      # 框架项目
-│   ├── flutter_im/
-│   ├── arkts_im/
-│   └── vue3_im/
-└── .claude/skills/ # AI skills
+├── md/              # 文档目录
+├── projects/        # 框架项目
+└── .claude/skills/  # AI skills
 ```
-
-### 规划文档规范
-- **`md/规划/通用/`**：框架无关，不得出现具体框架实现
-- SDK 接口和 ViewModel 接口使用 Dart 代码定义
-- 只写核心用法，不写版本号、安装命令
 
 ## AI 编辑规则
 
